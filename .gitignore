@@ -1,0 +1,16 @@
+.idea/
+.junie/
+.phpunit.cache/
+__theme_documentation/
+application/cache/*.cache
+application/cache/compiled/
+application/config/*.bak
+application/templates/admin/compiled/
+application/templates/default/compiled/
+system/cache/*.cache
+system/cache/compiled/
+system/config/*.bak
+system/logs/*.log
+vendor/
+composer.json
+composer.lock

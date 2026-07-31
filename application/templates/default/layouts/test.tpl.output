@@ -1,0 +1,1409 @@
+*** This is the output array of nodes from the Parser->parse() method ***
+
+object(System\Presentation\Engine\Parser\NodeCollection)[228]
+  private array 'nodes' =>
+    array (size=19)
+      0 =>
+        object(System\Presentation\Engine\Parser\Node)[227]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[66]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string 'Hello, ' (length=7)
+              public int 'line' => int 1
+              public int 'column' => int 1
+      1 =>
+        object(System\Presentation\Engine\Parser\VariableNode)[229]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[67]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+              public ?string 'value' => string 'name' (length=4)
+              public int 'line' => int 1
+              public int 'column' => int 8
+          private array 'parts' =>
+            array (size=16)
+              0 =>
+                object(System\Presentation\Engine\Parser\Node)[230]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[68]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'name' (length=4)
+                      public int 'line' => int 1
+                      public int 'column' => int 8
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[231]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[69]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                      public ?string 'value' => string '.' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 12
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[232]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[70]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'permission' (length=10)
+                      public int 'line' => int 1
+                      public int 'column' => int 13
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[233]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[71]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::OpenSquare) : string 'OPEN_SQUARE' (length=11)
+                      public ?string 'value' => string '[' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 23
+              4 =>
+                object(System\Presentation\Engine\Parser\Node)[234]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[72]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Number) : string 'NUMBER' (length=6)
+                      public ?string 'value' => string '5' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 24
+              5 =>
+                object(System\Presentation\Engine\Parser\Node)[235]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[73]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::CloseSquare) : string 'CLOSE_SQUARE' (length=12)
+                      public ?string 'value' => string ']' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 25
+              6 =>
+                object(System\Presentation\Engine\Parser\Node)[236]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[74]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::MethodOperator) : string 'METHOD_OPERATOR' (length=15)
+                      public ?string 'value' => string '->' (length=2)
+                      public int 'line' => int 1
+                      public int 'column' => int 26
+              7 =>
+                object(System\Presentation\Engine\Parser\Node)[237]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[75]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'get' (length=3)
+                      public int 'line' => int 1
+                      public int 'column' => int 28
+              8 =>
+                object(System\Presentation\Engine\Parser\Node)[238]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[76]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::OpenParen) : string 'OPEN_PAREN' (length=10)
+                      public ?string 'value' => string '(' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 31
+              9 =>
+                object(System\Presentation\Engine\Parser\Node)[239]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[77]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::String) : string 'STRING' (length=6)
+                      public ?string 'value' => string ''name'' (length=6)
+                      public int 'line' => int 1
+                      public int 'column' => int 32
+              10 =>
+                object(System\Presentation\Engine\Parser\Node)[240]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[78]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Comma) : string 'COMMA' (length=5)
+                      public ?string 'value' => string ',' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 38
+              11 =>
+                object(System\Presentation\Engine\Parser\Node)[241]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[79]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Literal) : string 'LITERAL' (length=7)
+                      public ?string 'value' => string 'true' (length=4)
+                      public int 'line' => int 1
+                      public int 'column' => int 40
+              12 =>
+                object(System\Presentation\Engine\Parser\Node)[242]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[80]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Comma) : string 'COMMA' (length=5)
+                      public ?string 'value' => string ',' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 44
+              13 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[243]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[81]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'item' (length=4)
+                      public int 'line' => int 1
+                      public int 'column' => int 46
+                  private array 'parts' =>
+                    array (size=4)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[244]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[82]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'item' (length=4)
+                              public int 'line' => int 1
+                              public int 'column' => int 46
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[245]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[83]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                              public ?string 'value' => string '.' (length=1)
+                              public int 'line' => int 1
+                              public int 'column' => int 50
+                      2 =>
+                        object(System\Presentation\Engine\Parser\Node)[246]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[84]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'type' (length=4)
+                              public int 'line' => int 1
+                              public int 'column' => int 51
+                      3 =>
+                        object(System\Presentation\Engine\Parser\Node)[247]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[85]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 1
+                              public int 'column' => int 55
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              14 =>
+                object(System\Presentation\Engine\Parser\Node)[248]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[86]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::CloseParen) : string 'CLOSE_PAREN' (length=11)
+                      public ?string 'value' => string ')' (length=1)
+                      public int 'line' => int 1
+                      public int 'column' => int 55
+              15 =>
+                object(System\Presentation\Engine\Parser\Node)[249]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[87]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 1
+                      public int 'column' => int 8
+          public array 'filters' =>
+            array (size=0)
+              empty
+      2 =>
+        object(System\Presentation\Engine\Parser\Node)[250]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[88]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '!
+
+Your favorite colors are:
+<ul>
+    ' (length=42)
+              public int 'line' => int 1
+              public int 'column' => int 68
+      3 =>
+        object(System\Presentation\Engine\Parser\DirectiveNode)[252]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[90]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachStart) : string 'FOREACH_START' (length=13)
+              public ?string 'value' => string 'foreach' (length=7)
+              public int 'line' => int 5
+              public int 'column' => int 5
+          private array 'subNodes' =>
+            array (size=10)
+              0 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[253]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[91]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'favorite_colors' (length=15)
+                      public int 'line' => int 5
+                      public int 'column' => int 0
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[254]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[92]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'favorite_colors' (length=15)
+                              public int 'line' => int 5
+                              public int 'column' => int 0
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[255]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[93]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 5
+                              public int 'column' => int 0
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[256]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[94]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Keyword) : string 'KEYWORD' (length=7)
+                      public ?string 'value' => string 'as' (length=2)
+                      public int 'line' => int 5
+                      public int 'column' => int 16
+              2 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[257]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[95]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'color' (length=5)
+                      public int 'line' => int 5
+                      public int 'column' => int 19
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[258]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[96]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'color' (length=5)
+                              public int 'line' => int 5
+                              public int 'column' => int 19
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[259]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[97]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 5
+                              public int 'column' => int 19
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[260]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[98]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 5
+                      public int 'column' => int 5
+              4 =>
+                object(System\Presentation\Engine\Parser\Node)[261]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[99]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+        <li>' (length=14)
+                      public int 'line' => int 5
+                      public int 'column' => int 43
+              5 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[262]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[100]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'color' (length=5)
+                      public int 'line' => int 6
+                      public int 'column' => int 13
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[263]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[101]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'color' (length=5)
+                              public int 'line' => int 6
+                              public int 'column' => int 13
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[264]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[102]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 6
+                              public int 'column' => int 13
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              6 =>
+                object(System\Presentation\Engine\Parser\Node)[265]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[103]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '</li>
+    ' (length=11)
+                      public int 'line' => int 6
+                      public int 'column' => int 24
+              7 =>
+                object(System\Presentation\Engine\Parser\Node)[266]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[104]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 7
+                      public int 'column' => int 5
+              8 =>
+                object(System\Presentation\Engine\Parser\Node)[267]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[105]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachEnd) : string 'FOREACH_END' (length=11)
+                      public ?string 'value' => string 'endforeach' (length=10)
+                      public int 'line' => int 7
+                      public int 'column' => int 5
+              9 =>
+                object(System\Presentation\Engine\Parser\Node)[268]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[106]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 7
+                      public int 'column' => int 5
+      4 =>
+        object(System\Presentation\Engine\Parser\Node)[251]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[107]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '
+</ul>
+
+' (length=11)
+              public int 'line' => int 7
+              public int 'column' => int 21
+      5 =>
+        object(System\Presentation\Engine\Parser\DirectiveNode)[270]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[109]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::IfStart) : string 'IF_START' (length=8)
+              public ?string 'value' => string 'if' (length=2)
+              public int 'line' => int 10
+              public int 'column' => int 1
+          private array 'subNodes' =>
+            array (size=12)
+              0 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[271]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[110]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'is_logged_in' (length=12)
+                      public int 'line' => int 10
+                      public int 'column' => int 0
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[272]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[111]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'is_logged_in' (length=12)
+                              public int 'line' => int 10
+                              public int 'column' => int 0
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[273]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[112]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 10
+                              public int 'column' => int 0
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[274]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[113]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 10
+                      public int 'column' => int 1
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[275]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[114]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+    <p>Welcome, ' (length=18)
+                      public int 'line' => int 10
+                      public int 'column' => int 22
+              3 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[276]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[115]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'username' (length=8)
+                      public int 'line' => int 11
+                      public int 'column' => int 17
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[277]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[116]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'username' (length=8)
+                              public int 'line' => int 11
+                              public int 'column' => int 17
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[278]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[117]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 11
+                              public int 'column' => int 17
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              4 =>
+                object(System\Presentation\Engine\Parser\Node)[279]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[118]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '! You are logged in.</p>
+' (length=26)
+                      public int 'line' => int 11
+                      public int 'column' => int 31
+              5 =>
+                object(System\Presentation\Engine\Parser\Node)[280]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[119]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 12
+                      public int 'column' => int 1
+              6 =>
+                object(System\Presentation\Engine\Parser\Node)[281]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[120]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Else) : string 'ELSE' (length=4)
+                      public ?string 'value' => string 'else' (length=4)
+                      public int 'line' => int 12
+                      public int 'column' => int 1
+              7 =>
+                object(System\Presentation\Engine\Parser\Node)[282]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[121]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 12
+                      public int 'column' => int 1
+              8 =>
+                object(System\Presentation\Engine\Parser\Node)[283]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[122]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+    <p>Please log in to access your account.</p>
+' (length=52)
+                      public int 'line' => int 12
+                      public int 'column' => int 11
+              9 =>
+                object(System\Presentation\Engine\Parser\Node)[284]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[123]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 14
+                      public int 'column' => int 1
+              10 =>
+                object(System\Presentation\Engine\Parser\Node)[285]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[124]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::IfEnd) : string 'IF_END' (length=6)
+                      public ?string 'value' => string 'endif' (length=5)
+                      public int 'line' => int 14
+                      public int 'column' => int 1
+              11 =>
+                object(System\Presentation\Engine\Parser\Node)[286]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[125]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 14
+                      public int 'column' => int 1
+      6 =>
+        object(System\Presentation\Engine\Parser\Node)[269]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[126]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '
+
+Address Details:
+<ul>
+    <li>Street: ' (length=44)
+              public int 'line' => int 14
+              public int 'column' => int 12
+      7 =>
+        object(System\Presentation\Engine\Parser\VariableNode)[287]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[127]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+              public ?string 'value' => string 'address' (length=7)
+              public int 'line' => int 18
+              public int 'column' => int 17
+          private array 'parts' =>
+            array (size=4)
+              0 =>
+                object(System\Presentation\Engine\Parser\Node)[288]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[128]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'address' (length=7)
+                      public int 'line' => int 18
+                      public int 'column' => int 17
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[289]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[129]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                      public ?string 'value' => string '.' (length=1)
+                      public int 'line' => int 18
+                      public int 'column' => int 24
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[290]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[130]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'street' (length=6)
+                      public int 'line' => int 18
+                      public int 'column' => int 25
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[291]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[131]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 18
+                      public int 'column' => int 17
+          public array 'filters' =>
+            array (size=0)
+              empty
+      8 =>
+        object(System\Presentation\Engine\Parser\Node)[292]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[132]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '</li>
+    <li>City: ' (length=21)
+              public int 'line' => int 18
+              public int 'column' => int 37
+      9 =>
+        object(System\Presentation\Engine\Parser\VariableNode)[293]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[133]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+              public ?string 'value' => string 'address' (length=7)
+              public int 'line' => int 19
+              public int 'column' => int 15
+          private array 'parts' =>
+            array (size=4)
+              0 =>
+                object(System\Presentation\Engine\Parser\Node)[294]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[134]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'address' (length=7)
+                      public int 'line' => int 19
+                      public int 'column' => int 15
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[295]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[135]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                      public ?string 'value' => string '.' (length=1)
+                      public int 'line' => int 19
+                      public int 'column' => int 22
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[296]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[136]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'city' (length=4)
+                      public int 'line' => int 19
+                      public int 'column' => int 23
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[297]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[137]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 19
+                      public int 'column' => int 15
+          public array 'filters' =>
+            array (size=0)
+              empty
+      10 =>
+        object(System\Presentation\Engine\Parser\Node)[298]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[138]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '</li>
+    <li>Zip: ' (length=20)
+              public int 'line' => int 19
+              public int 'column' => int 33
+      11 =>
+        object(System\Presentation\Engine\Parser\VariableNode)[299]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[139]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+              public ?string 'value' => string 'address' (length=7)
+              public int 'line' => int 20
+              public int 'column' => int 14
+          private array 'parts' =>
+            array (size=4)
+              0 =>
+                object(System\Presentation\Engine\Parser\Node)[300]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[140]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'address' (length=7)
+                      public int 'line' => int 20
+                      public int 'column' => int 14
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[301]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[141]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                      public ?string 'value' => string '.' (length=1)
+                      public int 'line' => int 20
+                      public int 'column' => int 21
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[302]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[142]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                      public ?string 'value' => string 'zip' (length=3)
+                      public int 'line' => int 20
+                      public int 'column' => int 22
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[303]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[143]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 20
+                      public int 'column' => int 14
+          public array 'filters' =>
+            array (size=0)
+              empty
+      12 =>
+        object(System\Presentation\Engine\Parser\Node)[304]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[144]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '</li>
+</ul>
+
+List of Friends:
+<ul>
+    ' (length=44)
+              public int 'line' => int 20
+              public int 'column' => int 31
+      13 =>
+        object(System\Presentation\Engine\Parser\DirectiveNode)[306]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[146]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachStart) : string 'FOREACH_START' (length=13)
+              public ?string 'value' => string 'foreach' (length=7)
+              public int 'line' => int 25
+              public int 'column' => int 5
+          private array 'subNodes' =>
+            array (size=12)
+              0 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[307]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[147]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'friend' (length=6)
+                      public int 'line' => int 25
+                      public int 'column' => int 0
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[308]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[148]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'friend' (length=6)
+                              public int 'line' => int 25
+                              public int 'column' => int 0
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[309]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[149]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 25
+                              public int 'column' => int 0
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[310]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[150]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Keyword) : string 'KEYWORD' (length=7)
+                      public ?string 'value' => string 'in' (length=2)
+                      public int 'line' => int 25
+                      public int 'column' => int 7
+              2 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[311]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[151]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'friends' (length=7)
+                      public int 'line' => int 25
+                      public int 'column' => int 10
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[312]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[152]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'friends' (length=7)
+                              public int 'line' => int 25
+                              public int 'column' => int 10
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[313]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[153]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 25
+                              public int 'column' => int 10
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[314]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[154]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 25
+                      public int 'column' => int 5
+              4 =>
+                object(System\Presentation\Engine\Parser\Node)[315]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[155]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+        <li>' (length=14)
+                      public int 'line' => int 25
+                      public int 'column' => int 36
+              5 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[316]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[156]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'friend' (length=6)
+                      public int 'line' => int 26
+                      public int 'column' => int 13
+                  private array 'parts' =>
+                    array (size=4)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[317]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[157]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'friend' (length=6)
+                              public int 'line' => int 26
+                              public int 'column' => int 13
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[318]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[158]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                              public ?string 'value' => string '.' (length=1)
+                              public int 'line' => int 26
+                              public int 'column' => int 19
+                      2 =>
+                        object(System\Presentation\Engine\Parser\Node)[319]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[159]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'name' (length=4)
+                              public int 'line' => int 26
+                              public int 'column' => int 20
+                      3 =>
+                        object(System\Presentation\Engine\Parser\Node)[320]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[160]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 26
+                              public int 'column' => int 13
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              6 =>
+                object(System\Presentation\Engine\Parser\Node)[321]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[161]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string ' (' (length=2)
+                      public int 'line' => int 26
+                      public int 'column' => int 30
+              7 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[322]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[162]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'friend' (length=6)
+                      public int 'line' => int 26
+                      public int 'column' => int 32
+                  private array 'parts' =>
+                    array (size=4)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[323]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[163]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'friend' (length=6)
+                              public int 'line' => int 26
+                              public int 'column' => int 32
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[324]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[164]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                              public ?string 'value' => string '.' (length=1)
+                              public int 'line' => int 26
+                              public int 'column' => int 38
+                      2 =>
+                        object(System\Presentation\Engine\Parser\Node)[325]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[165]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'age' (length=3)
+                              public int 'line' => int 26
+                              public int 'column' => int 39
+                      3 =>
+                        object(System\Presentation\Engine\Parser\Node)[326]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[166]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 26
+                              public int 'column' => int 32
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              8 =>
+                object(System\Presentation\Engine\Parser\Node)[327]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[167]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string ' years old)</li>
+    ' (length=22)
+                      public int 'line' => int 26
+                      public int 'column' => int 48
+              9 =>
+                object(System\Presentation\Engine\Parser\Node)[328]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[168]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 27
+                      public int 'column' => int 5
+              10 =>
+                object(System\Presentation\Engine\Parser\Node)[329]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[169]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachEnd) : string 'FOREACH_END' (length=11)
+                      public ?string 'value' => string 'endforeach' (length=10)
+                      public int 'line' => int 27
+                      public int 'column' => int 5
+              11 =>
+                object(System\Presentation\Engine\Parser\Node)[330]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[170]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 27
+                      public int 'column' => int 5
+      14 =>
+        object(System\Presentation\Engine\Parser\Node)[305]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[171]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '
+</ul>
+
+' (length=11)
+              public int 'line' => int 27
+              public int 'column' => int 21
+      15 =>
+        object(System\Presentation\Engine\Parser\Node)[331]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[172]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '# Nested Conditions and Loops Test #' (length=36)
+              public int 'line' => int 30
+              public int 'column' => int 2
+      16 =>
+        object(System\Presentation\Engine\Parser\Node)[332]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[173]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '
+' (length=2)
+              public int 'line' => int 30
+              public int 'column' => int 39
+      17 =>
+        object(System\Presentation\Engine\Parser\DirectiveNode)[334]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[175]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::IfStart) : string 'IF_START' (length=8)
+              public ?string 'value' => string 'if' (length=2)
+              public int 'line' => int 31
+              public int 'column' => int 1
+          private array 'subNodes' =>
+            array (size=17)
+              0 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[335]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[176]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'cart' (length=4)
+                      public int 'line' => int 31
+                      public int 'column' => int 0
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[336]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[177]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'cart' (length=4)
+                              public int 'line' => int 31
+                              public int 'column' => int 0
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[337]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[178]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 31
+                              public int 'column' => int 0
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              1 =>
+                object(System\Presentation\Engine\Parser\Node)[338]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[179]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Operator) : string 'OPERATOR' (length=8)
+                      public ?string 'value' => string 'is not' (length=6)
+                      public int 'line' => int 31
+                      public int 'column' => int 5
+              2 =>
+                object(System\Presentation\Engine\Parser\Node)[339]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[180]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Literal) : string 'LITERAL' (length=7)
+                      public ?string 'value' => string 'empty' (length=5)
+                      public int 'line' => int 31
+                      public int 'column' => int 12
+              3 =>
+                object(System\Presentation\Engine\Parser\Node)[340]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[181]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 31
+                      public int 'column' => int 1
+              4 =>
+                object(System\Presentation\Engine\Parser\Node)[341]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[182]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+    Your Shopping Cart:
+    <ul>
+        ' (length=45)
+                      public int 'line' => int 31
+                      public int 'column' => int 27
+              5 =>
+                object(System\Presentation\Engine\Parser\Node)[342]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[183]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 34
+                      public int 'column' => int 9
+              6 =>
+                object(System\Presentation\Engine\Parser\DirectiveNode)[344]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[184]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachStart) : string 'FOREACH_START' (length=13)
+                      public ?string 'value' => string 'foreach' (length=7)
+                      public int 'line' => int 34
+                      public int 'column' => int 9
+                  private array 'subNodes' =>
+                    array (size=14)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\VariableNode)[345]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[185]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                              public ?string 'value' => string 'cart' (length=4)
+                              public int 'line' => int 34
+                              public int 'column' => int 0
+                          private array 'parts' =>
+                            array (size=2)
+                              0 =>
+                                object(System\Presentation\Engine\Parser\Node)[346]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[186]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'cart' (length=4)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 0
+                              1 =>
+                                object(System\Presentation\Engine\Parser\Node)[347]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[187]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                                      public ?string 'value' => string '' (length=0)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 0
+                          public array 'filters' =>
+                            array (size=0)
+                              empty
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[348]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[188]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Keyword) : string 'KEYWORD' (length=7)
+                              public ?string 'value' => string 'as' (length=2)
+                              public int 'line' => int 34
+                              public int 'column' => int 5
+                      2 =>
+                        object(System\Presentation\Engine\Parser\VariableNode)[349]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[189]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                              public ?string 'value' => string 'index' (length=5)
+                              public int 'line' => int 34
+                              public int 'column' => int 8
+                          private array 'parts' =>
+                            array (size=2)
+                              0 =>
+                                object(System\Presentation\Engine\Parser\Node)[350]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[190]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'index' (length=5)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 8
+                              1 =>
+                                object(System\Presentation\Engine\Parser\Node)[351]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[191]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                                      public ?string 'value' => string '' (length=0)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 8
+                          public array 'filters' =>
+                            array (size=0)
+                              empty
+                      3 =>
+                        object(System\Presentation\Engine\Parser\Node)[352]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[192]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::DoubleArrow) : string 'DOUBLE_ARROW' (length=12)
+                              public ?string 'value' => string '=>' (length=2)
+                              public int 'line' => int 34
+                              public int 'column' => int 14
+                      4 =>
+                        object(System\Presentation\Engine\Parser\VariableNode)[353]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[193]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                              public ?string 'value' => string 'item' (length=4)
+                              public int 'line' => int 34
+                              public int 'column' => int 17
+                          private array 'parts' =>
+                            array (size=2)
+                              0 =>
+                                object(System\Presentation\Engine\Parser\Node)[354]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[194]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'item' (length=4)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 17
+                              1 =>
+                                object(System\Presentation\Engine\Parser\Node)[355]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[195]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                                      public ?string 'value' => string '' (length=0)
+                                      public int 'line' => int 34
+                                      public int 'column' => int 17
+                          public array 'filters' =>
+                            array (size=0)
+                              empty
+                      5 =>
+                        object(System\Presentation\Engine\Parser\Node)[356]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[196]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 34
+                              public int 'column' => int 9
+                      6 =>
+                        object(System\Presentation\Engine\Parser\Node)[357]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[197]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                              public ?string 'value' => string '
+            <li>' (length=18)
+                              public int 'line' => int 34
+                              public int 'column' => int 44
+                      7 =>
+                        object(System\Presentation\Engine\Parser\VariableNode)[358]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[198]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                              public ?string 'value' => string 'item' (length=4)
+                              public int 'line' => int 35
+                              public int 'column' => int 17
+                          private array 'parts' =>
+                            array (size=4)
+                              0 =>
+                                object(System\Presentation\Engine\Parser\Node)[359]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[199]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'item' (length=4)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 17
+                              1 =>
+                                object(System\Presentation\Engine\Parser\Node)[360]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[200]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                                      public ?string 'value' => string '.' (length=1)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 21
+                              2 =>
+                                object(System\Presentation\Engine\Parser\Node)[361]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[201]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'name' (length=4)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 22
+                              3 =>
+                                object(System\Presentation\Engine\Parser\Node)[362]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[202]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                                      public ?string 'value' => string '' (length=0)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 17
+                          public array 'filters' =>
+                            array (size=0)
+                              empty
+                      8 =>
+                        object(System\Presentation\Engine\Parser\Node)[363]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[203]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                              public ?string 'value' => string ' - ' (length=3)
+                              public int 'line' => int 35
+                              public int 'column' => int 32
+                      9 =>
+                        object(System\Presentation\Engine\Parser\VariableNode)[364]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[204]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                              public ?string 'value' => string 'item' (length=4)
+                              public int 'line' => int 35
+                              public int 'column' => int 35
+                          private array 'parts' =>
+                            array (size=4)
+                              0 =>
+                                object(System\Presentation\Engine\Parser\Node)[365]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[205]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'item' (length=4)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 35
+                              1 =>
+                                object(System\Presentation\Engine\Parser\Node)[366]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[206]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::AccessOperator) : string 'ACCESS_OPERATOR' (length=15)
+                                      public ?string 'value' => string '.' (length=1)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 39
+                              2 =>
+                                object(System\Presentation\Engine\Parser\Node)[367]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[207]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                                      public ?string 'value' => string 'price' (length=5)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 40
+                              3 =>
+                                object(System\Presentation\Engine\Parser\Node)[368]
+                                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                                    object(System\Presentation\Engine\Lexer\Token)[208]
+                                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                                      public ?string 'value' => string '' (length=0)
+                                      public int 'line' => int 35
+                                      public int 'column' => int 35
+                          public array 'filters' =>
+                            array (size=0)
+                              empty
+                      10 =>
+                        object(System\Presentation\Engine\Parser\Node)[369]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[209]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                              public ?string 'value' => string '$</li>
+        ' (length=16)
+                              public int 'line' => int 35
+                              public int 'column' => int 51
+                      11 =>
+                        object(System\Presentation\Engine\Parser\Node)[370]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[210]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 36
+                              public int 'column' => int 9
+                      12 =>
+                        object(System\Presentation\Engine\Parser\Node)[371]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[211]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::ForeachEnd) : string 'FOREACH_END' (length=11)
+                              public ?string 'value' => string 'endforeach' (length=10)
+                              public int 'line' => int 36
+                              public int 'column' => int 9
+                      13 =>
+                        object(System\Presentation\Engine\Parser\Node)[372]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[212]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 36
+                              public int 'column' => int 9
+              7 =>
+                object(System\Presentation\Engine\Parser\Node)[343]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[213]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+    </ul>
+    <p>Total Price: ' (length=33)
+                      public int 'line' => int 36
+                      public int 'column' => int 25
+              8 =>
+                object(System\Presentation\Engine\Parser\VariableNode)[373]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[214]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableStart) : string 'VARIABLE_START' (length=14)
+                      public ?string 'value' => string 'total_price' (length=11)
+                      public int 'line' => int 38
+                      public int 'column' => int 21
+                  private array 'parts' =>
+                    array (size=2)
+                      0 =>
+                        object(System\Presentation\Engine\Parser\Node)[374]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[215]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Identifier) : string 'IDENTIFIER' (length=10)
+                              public ?string 'value' => string 'total_price' (length=11)
+                              public int 'line' => int 38
+                              public int 'column' => int 21
+                      1 =>
+                        object(System\Presentation\Engine\Parser\Node)[375]
+                          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                            object(System\Presentation\Engine\Lexer\Token)[216]
+                              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::VariableEnd) : string 'VARIABLE_END' (length=12)
+                              public ?string 'value' => string '' (length=0)
+                              public int 'line' => int 38
+                              public int 'column' => int 21
+                  public array 'filters' =>
+                    array (size=0)
+                      empty
+              9 =>
+                object(System\Presentation\Engine\Parser\Node)[376]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[217]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '$</p>
+' (length=7)
+                      public int 'line' => int 38
+                      public int 'column' => int 38
+              10 =>
+                object(System\Presentation\Engine\Parser\Node)[377]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[218]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 39
+                      public int 'column' => int 1
+              11 =>
+                object(System\Presentation\Engine\Parser\Node)[378]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[219]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Else) : string 'ELSE' (length=4)
+                      public ?string 'value' => string 'else' (length=4)
+                      public int 'line' => int 39
+                      public int 'column' => int 1
+              12 =>
+                object(System\Presentation\Engine\Parser\Node)[379]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[220]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 39
+                      public int 'column' => int 1
+              13 =>
+                object(System\Presentation\Engine\Parser\Node)[380]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[221]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+                      public ?string 'value' => string '
+    <p>Your cart is empty.</p>
+' (length=34)
+                      public int 'line' => int 39
+                      public int 'column' => int 11
+              14 =>
+                object(System\Presentation\Engine\Parser\Node)[381]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[222]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockStart) : string 'BLOCK_START' (length=11)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 41
+                      public int 'column' => int 1
+              15 =>
+                object(System\Presentation\Engine\Parser\Node)[382]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[223]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::IfEnd) : string 'IF_END' (length=6)
+                      public ?string 'value' => string 'endif' (length=5)
+                      public int 'line' => int 41
+                      public int 'column' => int 1
+              16 =>
+                object(System\Presentation\Engine\Parser\Node)[383]
+                  public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+                    object(System\Presentation\Engine\Lexer\Token)[224]
+                      public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::BlockEnd) : string 'BLOCK_END' (length=9)
+                      public ?string 'value' => string '' (length=0)
+                      public int 'line' => int 41
+                      public int 'column' => int 1
+      18 =>
+        object(System\Presentation\Engine\Parser\Node)[333]
+          public readonly System\Presentation\Engine\Lexer\Token 'token' =>
+            object(System\Presentation\Engine\Lexer\Token)[225]
+              public System\Presentation\Engine\Lexer\TokenType 'type' => enum(System\Presentation\Engine\Lexer\TokenType::Text) : string 'TEXT' (length=4)
+              public ?string 'value' => string '
+' (length=2)
+              public int 'line' => int 41
+              public int 'column' => int 12

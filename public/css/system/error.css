@@ -1,0 +1,422 @@
+/* --- RESET & BASICS --- */
+:root {
+    --bg-body: #f9fafb;
+    --bg-card: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border-light: #e5e7eb;
+
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-600: #dc2626;
+    --red-800: #991b1b;
+
+    --blue-600: #2563eb;
+
+    --code-bg: #1e1e1e;
+    --code-text: #e5e7eb;
+    --code-line-num: #6b7280;
+    --code-highlight-bg: rgba(220, 38, 38, 0.15);
+    --code-highlight-border: #ef4444;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- LAYOUT UTILITIES --- */
+.container {
+    max-width: 80rem; /* approx 1280px */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Ensure the main grid column doesn't blow out */
+.grid-layout > div {
+    min-width: 0; /* Critical for grid children to respect overflow */
+}
+
+/* Constrain trace items */
+.trace-item {
+    max-width: 100%;
+    overflow: hidden; /* Prevent item itself from overflowing */
+}
+
+/* Add horizontal scroll to the argument box */
+.trace-arg-box {
+    overflow-x: auto;
+    white-space: nowrap; /* Keep args on one line unless manually broken */
+    max-width: 100%;
+}
+
+/* Ensure code container scrolls */
+.code-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Truncate file paths if they are insanely long */
+.trace-file {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Allow indented file paths to scroll/truncate properly */
+.trace-file-indented {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 1rem; }
+.gap-8 { gap: 2rem; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mr-2 { margin-right: 0.5rem; }
+
+/* Mobile Responsive Grid */
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .grid-layout {
+        grid-template-columns: 2fr 1fr; /* 2/3 for stack trace, 1/3 for env vars */
+    }
+    .sm-row {
+        flex-direction: row;
+    }
+}
+
+/* --- COMPONENTS --- */
+
+/* Navbar */
+.navbar {
+    background: white;
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 4rem;
+}
+.navbar-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+.brand-icon {
+    height: 2rem;
+    width: 2rem;
+    background: var(--red-100);
+    color: var(--red-600);
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+}
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 1rem;
+}
+.badge-red { background: var(--red-100); color: var(--red-800); }
+.badge-gray { background: #f3f4f6; color: #1f2937; }
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+.card-red-border {
+    border-color: #fca5a5; /* Red-200 */
+}
+
+/* Error Header Section */
+.error-header {
+    background-color: var(--red-50);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--red-100);
+}
+.error-type {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--red-600);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+.error-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.25rem 0;
+    color: #111827;
+}
+.error-desc { color: #4b5563; }
+
+/* Action Button */
+.btn-copy {
+    background: transparent;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: center;
+    height: fit-content;
+}
+.btn-copy:hover { background-color: var(--red-100); }
+.btn-success { background-color: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+
+/* File Location Bar */
+.location-bar {
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+}
+@media (min-width: 640px) {
+    .location-bar { flex-direction: row; align-items: center; }
+}
+.filepath {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: #4b5563;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+}
+.line-badge {
+    background: #e5e7eb;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #374151;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+
+/* Code Block */
+.code-container {
+    background-color: var(--code-bg);
+    overflow-x: auto;
+}
+.code-grid {
+    display: flex;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+}
+.line-numbers {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    padding-right: 1rem;
+    border-right: 1px solid #374151;
+    color: var(--code-line-num);
+    user-select: none;
+    min-width: 3rem;
+}
+.code-lines {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    color: var(--code-text);
+    white-space: pre;
+    width: 100%;
+}
+.highlight-line {
+    background-color: var(--code-highlight-bg);
+    border-left: 2px solid var(--code-highlight-border);
+    width: calc(100% + 1rem); /* Extend to right edge */
+    margin-left: -1rem;
+    padding-left: calc(1rem - 2px);
+    display: block;
+}
+.active-line-num {
+    color: #f87171;
+    font-weight: bold;
+}
+
+/* Syntax Colors (Mock) */
+.kwd { color: #c678dd; } /* keyword */
+.func { color: #61afef; } /* function */
+.str { color: #98c379; } /* string */
+.var { color: #e06c75; } /* variable */
+.op { color: #56b6c2; } /* operator */
+.comment { color: #6b7280; font-style: italic; }
+
+/* Stack Trace List */
+.trace-list { list-style: none; padding: 0; margin: 0; }
+.trace-item {
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: default;
+}
+.trace-item:last-child { border-bottom: none; }
+.trace-item:hover { background-color: #f9fafb; }
+
+.trace-method {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--blue-600);
+    margin-bottom: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.frame-badge {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    padding: 0 0.375rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-sans);
+}
+.trace-file {
+    font-size: 0.875rem;
+    color: #4b5563;
+    font-family: var(--font-mono);
+    word-break: break-all;
+}
+.trace-arg-box {
+    margin-top: 0.5rem;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Tables (Request/Env) */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+.data-table tr { border-bottom: 1px solid #f3f4f6; }
+.data-table td { padding: 0.5rem 1rem; vertical-align: top; }
+.dt-key {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #6b7280;
+    width: 35%;
+    background: rgba(249, 250, 251, 0.5);
+}
+.dt-val {
+    font-family: var(--font-mono);
+    color: #374151;
+    word-break: break-all;
+}
+.section-header {
+    padding: 0.75rem 1rem;
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border-light);
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.badge-green { background: #d1fae5; color: #047857; padding: 0 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; }
+
+.footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    padding-bottom: 2rem;
+}
+
+/* Details/Summary Animation */
+details > summary {
+    list-style: none;
+    outline: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+.chevron {
+    transition: transform 0.2s;
+    color: #9ca3af;
+}
+details[open] .chevron {
+    transform: rotate(90deg);
+}
+
+/* Specific tweaks for Stack Trace Details */
+details.trace-details summary {
+    cursor: pointer;
+}
+details.trace-details[open] .chevron {
+    transform: rotate(90deg);
+}
+
+/* Ensure trace-file is always indented for expandable items to match header */
+.trace-file-indented {
+    padding-left: 22px; /* Matches the SVG icon width + gap */
+}
+
+/* VS Code Link */
+.vscode-link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    color: #6b7280;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+}
+.vscode-link:hover {
+    opacity: 1;
+    color: #2563eb;
+}

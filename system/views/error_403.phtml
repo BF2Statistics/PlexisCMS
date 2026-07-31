@@ -1,0 +1,140 @@
+<?php
+/**
+ * @var Throwable|null $exception
+ * @var \System\Http\Request $request
+ * @var string $message
+ */
+$site_title = 'Access Denied';
+$headline = 'Access Denied';
+$code = 403;
+try {
+    $site_title = \Application::Config()->get('site_title', 'Access Denied');
+}
+catch (\Throwable $e) {
+    // Ignore
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $headline ?> - <?= $code ?></title>
+    <base href="<?= \System\Http\Request::BaseUrl() ?>/"/>
+    <link rel="stylesheet" type="text/css" href="public/css/system/error.css" media="screen" />
+    <style>
+        /* Specific Layout Override for 4xx pages: Equal width columns */
+        @media (min-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container navbar-inner">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <span><?= htmlspecialchars($site_title) ?></span>
+        </div>
+        <div class="flex">
+            <span class="badge badge-red"><?= $code ?> Forbidden</span>
+        </div>
+    </div>
+</nav>
+
+<main class="container" style="padding-top: 2rem;">
+
+    <!-- MAIN CARD -->
+    <div class="card card-red-border" style="margin-bottom: 2rem;">
+        <div class="error-header">
+            <div class="flex sm-row flex-col justify-between items-start">
+                <div>
+                    <div class="error-type">HTTP Error <?= $code ?></div>
+                    <h1 class="error-title"><?= htmlspecialchars($headline) ?></h1>
+                    <p class="error-desc"><?= htmlspecialchars($message) ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="location-bar">
+            <div class="filepath">
+                <?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? $request?->getPath() ?? '/') ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFO GRID -->
+    <div class="grid-layout">
+
+        <!-- LEFT: Request Info -->
+        <div>
+            <div class="card">
+                <div class="section-header">
+                    <span>Request Details</span>
+                    <span class="badge-green"><?= $request?->method()->value ?? $_SERVER['REQUEST_METHOD'] ?? 'GET' ?></span>
+                </div>
+                <table class="data-table">
+                    <tr>
+                        <td class="dt-key">URL</td>
+                        <td class="dt-val"><?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? $request?->getPath() ?? '/') ?></td>
+                    </tr>
+                    <tr>
+                        <td class="dt-key">Client IP</td>
+                        <td class="dt-val"><?= htmlspecialchars(\System\Http\Request::ClientIp() ?? '-') ?></td>
+                    </tr>
+                    <tr>
+                        <td class="dt-key">User Agent</td>
+                        <td class="dt-val"><?= htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? '-') ?></td>
+                    </tr>
+                    <?php if (!empty($_SERVER['HTTP_REFERER'])): ?>
+                        <tr>
+                            <td class="dt-key">Referer</td>
+                            <td class="dt-val"><?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+
+        <!-- RIGHT: Environment -->
+        <div>
+            <div class="card">
+                <div class="section-header">
+                    <span>Environment</span>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <table class="data-table">
+                        <?php
+                        $safeKeys = ['APP_ENV', 'APP_DEBUG', 'PHP_VERSION', 'SERVER_NAME', 'SERVER_SOFTWARE'];
+                        foreach ($safeKeys as $key):
+                            $val = getenv($key) ?: ($_SERVER[$key] ?? null);
+                            if ($val): ?>
+                                <tr>
+                                    <td class="dt-key"><?= $key ?></td>
+                                    <td class="dt-val"><?= htmlspecialchars($val) ?></td>
+                                </tr>
+                            <?php endif; endforeach; ?>
+                        <tr>
+                            <td class="dt-key">Timestamp</td>
+                            <td class="dt-val"><?= date('Y-m-d H:i:s') ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Generated by Plexis Core &bull; Time: <?= date('Y-m-d H:i:s') ?></p>
+    </div>
+
+</main>
+</body>
+</html>

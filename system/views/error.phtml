@@ -1,0 +1,400 @@
+<?php
+/**
+ * @var Throwable $exception
+ * @var array $preview  ['lines' => '...', 'numbers' => '...'] (From ErrorHighlighter)
+ * @var string $headline
+ * @var \System\Http\Request $request
+ */
+
+// Load config safely
+$site_title = 'Plexis';
+$editorProtocol = 'vscode';
+$editorRemoveRoot = false;
+try
+{
+    $editorProtocol =  \System::Config()->get('editorProtocol', 'vscode');
+    $editorRemoveRoot = \System::Config()->get('editorRemoveRoot', false);
+    $site_title = \Application::Config()->get('site_title', 'Plexis');
+}
+catch (\Throwable $e) {
+    // Ignore
+}
+$exceptionFile = $exception->getFile();
+if ($editorRemoveRoot && str_starts_with($exceptionFile, ROOT)) {
+    $exceptionFile = str_replace(ROOT, '', $exceptionFile);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Error - <?= get_class($exception) ?></title>
+    <base href="<?= \System\Http\Request::BaseUrl() ?>/"/>
+    <link rel="stylesheet" type="text/css" href="public/css/system/error.css" media="screen" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+    <div class="container navbar-inner">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <span><?= htmlspecialchars($site_title . ' Debugger') ?></span>
+        </div>
+        <div class="flex">
+            <span class="badge badge-red">PHP <?= phpversion() ?></span>
+            <span class="badge badge-gray"><?= getenv('APP_ENV') ?: 'Environment' ?></span>
+        </div>
+    </div>
+</nav>
+
+<main class="container" style="padding-top: 2rem;">
+
+    <!-- ERROR CARD -->
+    <div class="card card-red-border">
+        <!-- Header -->
+        <div class="error-header">
+            <div class="flex sm-row flex-col justify-between items-start">
+                <div>
+                    <div class="error-type"><?= $headline ?></div>
+                    <h1 class="error-title"><?= htmlspecialchars($exception->getMessage()) ?></h1>
+                    <p class="error-desc">Error code: <?= $exception->getCode() ?></p>
+                </div>
+                <button id="copy-error-btn" class="btn-copy mt-2">Copy Error</button>
+            </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="location-bar">
+            <div class="filepath">
+                <svg width="16" height="16" style="margin-right: 8px; color:#9ca3af;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                <?= htmlspecialchars($exception->getFile()) ?>
+                <a href="<?= sprintf($editorProtocol, $exceptionFile, $exception->getLine()) ?>" class="vscode-link" title="Open in Editor">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+            <div class="line-badge">Line <?= $exception->getLine() ?></div>
+        </div>
+
+        <!-- Code Preview -->
+        <div class="code-container">
+            <div class="code-grid">
+                <!-- Line Numbers -->
+                <div class="line-numbers">
+                    <?= $preview['numbers'] ?? '' ?>
+                </div>
+                <!-- Source -->
+                <div class="code-lines">
+                    <?= $preview['lines'] ?? '<!-- No source preview available -->' ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 COLUMN LAYOUT -->
+    <div class="grid-layout">
+
+        <!-- LEFT COLUMN WRAPPER (This was missing!) -->
+        <div>
+
+            <!-- Context Variables (Collapsible) -->
+            <?php if (method_exists($exception, 'getContext') && ($context = $exception->getContext())): ?>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <details open>
+                        <summary class="section-header" style="cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <svg class="chevron" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Exception Context</span>
+                            </div>
+                        </summary>
+                        <div style="border-top: 1px solid var(--border-light);">
+                            <table class="data-table">
+                                <?php foreach ($context as $key => $val): ?>
+                                    <tr>
+                                        <td class="dt-key"><?= htmlspecialchars($key) ?></td>
+                                        <td class="dt-val"><span class="var"><?= htmlspecialchars(self::DescribeVar($val)) ?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+            <?php endif; ?>
+
+            <!-- Stack Trace -->
+            <div class="card" style="margin-bottom: 0;">
+                <div class="section-header">
+                    <span>Stack Trace</span>
+                    <span style="font-size: 0.75rem; color: #6b7280; font-weight: normal; background: #f3f4f6; padding: 2px 8px; border-radius: 10px; border: 1px solid #e5e7eb;">Latest First</span>
+                </div>
+                <ul class="trace-list">
+                    <?php
+                    use System\Diagnostics\ErrorHighlighter;
+                    $trace = $exception->getTrace();
+
+                    // Helper to format arguments recursively with indentation
+                    $renderArg = function($var, $depth = 0) use (&$renderArg)
+                    {
+                        if (is_array($var))
+                        {
+                            if (empty($var)) return '[]';
+                            if ($depth >= 4) return 'array(' . count($var) . ')';
+
+                            $indent = str_repeat("&nbsp;", ($depth + 1) * 4);
+                            $html = "[<br>";
+                            $count = 0;
+                            foreach ($var as $key => $val)
+                            {
+                                if ($count >= 25) {
+                                    $html .= $indent . "&nbsp;&nbsp;&nbsp;&nbsp;...<br>";
+                                    break;
+                                }
+                                $keyStr = htmlspecialchars(is_string($key) ? "'$key'" : $key);
+                                $html .= $indent . "&nbsp;&nbsp;&nbsp;&nbsp;" . $keyStr . " => " . $renderArg($val, $depth + 1) . ",<br>";
+                                $count++;
+                            }
+                            $html .= $indent . "]";
+                            return $html;
+                        }
+                        return htmlspecialchars(self::DescribeVar($var));
+                    };
+
+                    // Determine if the error originated from within the ErrorHandler itself
+                    $isInternalError = false;
+                    if (str_contains($exceptionFile, 'system' . DS . 'framework' . DS . 'Diagnostics' . DS . 'ErrorHandler.php')) {
+                        $isInternalError = true;
+                    }
+
+                    $i = 0;
+                    foreach ($trace as $frame):
+                        // Skip ErrorHandler frames unless the error actually happened there
+                        $class = $frame['class'] ?? '';
+                        if (!$isInternalError && $class === 'System\Diagnostics\ErrorHandler') continue;
+
+                        $i++;
+                        $type = $frame['type'] ?? '';
+                        $function = $frame['function'] ?? '';
+                        $file = $frame['file'] ?? 'internal';
+                        $fileEditorPath = ($editorRemoveRoot) ? str_replace(ROOT, '', $file) : $file;
+                        $line = $frame['line'] ?? '-';
+                        $hasArgs = !empty($frame['args']);
+
+                        // FIX: If the TOP frame (i=1) has missing file info (Reflection),
+                        /* assume it corresponds to the actual Exception location.
+                        if ($i === 1 && $file === 'internal')
+                        {
+                            $file = $exception->getFile();
+                            $line = $exception->getLine();
+                        }
+                        */
+
+                        // Format arguments using helper
+                        $argsDisplay = [];
+                        if ($hasArgs)
+                        {
+                            foreach ($frame['args'] as $arg)
+                            {
+                                $argsDisplay[] = $renderArg($arg);
+                            }
+                        }
+
+                        // Get snippet for trace (if file exists)
+                        $tracePreview = null;
+                        if ($file !== 'internal' && file_exists($file))
+                        {
+                            // Only fetch snippet if we have valid line number
+                            if (is_numeric($line) && $line > 0) {
+                                $tracePreview = ErrorHighlighter::GetSnippet($file, $line, 5); // 5 lines padding
+                            }
+                        }
+                        ?>
+                        <li class="trace-item">
+                            <?php if ($hasArgs || $tracePreview): ?>
+                                <details class="trace-details">
+                                    <summary>
+                                        <div class="trace-method">
+                                            <div style="display:flex; align-items:center; gap: 0.5rem;">
+                                                <svg class="chevron" width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span><?= htmlspecialchars($class . $type . $function) ?></span>
+                                            </div>
+                                            <span class="frame-badge">Frame #<?= $i ?></span>
+                                        </div>
+                                        <div class="trace-file trace-file-indented">
+                                            <?= htmlspecialchars($file) ?> <span style="color:#9ca3af;">:</span> <span style="font-weight:bold; color:#1f2937;"><?= $line ?></span>
+                                            <?php if ($file !== 'internal'): ?>
+                                                <a href="<?= sprintf($editorProtocol, $fileEditorPath, $line) ?>" class="vscode-link" title="Open in Editor">
+                                                    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </summary>
+
+                                    <div style="padding-top: 0.5rem; padding-left: 22px;">
+                                        <?php if ($hasArgs): ?>
+                                            <div class="trace-arg-box" style="margin-bottom: 0.5rem;">
+                                                <span style="color:#6b7280; font-size: 0.75rem; font-weight: bold; display: block; margin-bottom: 4px;">Arguments:</span>
+                                                <?php
+                                                // Only use block formatting if an argument is multiline (contains <br>)
+                                                // Otherwise display inline comma separated
+                                                $isMultiline = false;
+                                                foreach($argsDisplay as $ad)
+                                                {
+                                                    if (strpos($ad, '<br>') !== false)
+                                                    {
+                                                        $isMultiline = true;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if ($isMultiline) {
+                                                    echo "[<br>&nbsp;&nbsp;&nbsp;&nbsp;" . implode(",<br>&nbsp;&nbsp;&nbsp;&nbsp;", $argsDisplay) . "<br>]";
+                                                } else {
+                                                    echo "[" . implode(", ", $argsDisplay) . "]";
+                                                }
+                                                ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if ($tracePreview): ?>
+                                            <div class="code-container" style="border-radius: 4px; border: 1px solid #374151;">
+                                                <div class="code-grid" style="padding: 0.5rem;">
+                                                    <div class="line-numbers" style="min-width: 2rem; padding-right: 0.5rem;">
+                                                        <?= $tracePreview['numbers'] ?? '' ?>
+                                                    </div>
+                                                    <div class="code-lines" style="padding-left: 0.5rem;">
+                                                        <?= $tracePreview['lines'] ?? '' ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </details>
+
+                            <?php else: ?>
+                                <div class="trace-method">
+                                    <div style="padding-left: 22px;">
+                                        <span><?= htmlspecialchars($class . $type . $function) ?></span>
+                                    </div>
+                                    <span class="frame-badge">Frame #<?= $i ?></span>
+                                </div>
+                                <div class="trace-file" style="padding-left: 22px;">
+                                    <?= htmlspecialchars($file) ?> <span style="color:#9ca3af;">:</span> <span style="font-weight:bold; color:#1f2937;"><?= $line ?></span>
+                                    <?php if ($file !== 'internal'): ?>
+                                        <a href="<?= sprintf($editorProtocol, $file, $line) ?>" class="vscode-link" title="Open in Editor">
+                                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+
+        <!-- RIGHT: ENVIRONMENT -->
+        <div>
+            <!-- Request Info -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="section-header">
+                    <span>Request</span>
+                    <span class="badge-green"><?= $request->method()->value ?? 'CLI' ?></span>
+                </div>
+                <table class="data-table">
+                    <tr>
+                        <td class="dt-key">URL Path</td>
+                        <td class="dt-val"><?= htmlspecialchars($request?->getPath() ?? '-') ?></td>
+                    </tr>
+                    <tr>
+                        <td class="dt-key">Remote IP</td>
+                        <td class="dt-val"><?= htmlspecialchars(\System\Http\Request::ClientIp() ?? '-') ?></td>
+                    </tr>
+                    <tr>
+                        <td class="dt-key">User Agent</td>
+                        <td class="dt-val" title="<?= htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? '') ?>">
+                            <?= htmlspecialchars(substr($_SERVER['HTTP_USER_AGENT'] ?? '-', 0, 128)) ?>...
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Env Info -->
+            <div class="card">
+                <div class="section-header">
+                    <span>Environment</span>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <table class="data-table">
+                        <?php
+                        // Only show safe environment variables
+                        $safeKeys = ['APP_ENV', 'APP_DEBUG', 'PHP_VERSION', 'SERVER_NAME', 'SERVER_SOFTWARE'];
+                        foreach ($safeKeys as $key):
+                            $val = getenv($key) ?: ($_SERVER[$key] ?? null);
+                            if ($val): ?>
+                                <tr>
+                                    <td class="dt-key"><?= $key ?></td>
+                                    <td class="dt-val"><?= htmlspecialchars($val) ?></td>
+                                </tr>
+                            <?php endif; endforeach; ?>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Generated by Plexis Core &bull;
+            Time: <?= date('Y-m-d H:i:s') ?> &bull;
+            Loaded In: <?= round(microtime(true) - TIME_START, 3) ?> seconds &bull;
+            Memory: <?= round(memory_get_peak_usage() / 1024 / 1024, 2) ?> MB
+        </p>
+    </div>
+
+</main>
+
+<script nonce="<?= $request?->session()?->get('csp_nonce') ?>">
+    function copyError() {
+        // PHP variables injected here for JS use
+        const errorTitle = "<?= addslashes(get_class($exception)) ?>: <?= addslashes($exception->getMessage()) ?>";
+        const location = "<?= addslashes($exception->getFile()) ?> line <?= $exception->getLine() ?>";
+        const fullText = `${errorTitle}\n${location}`;
+
+        const textArea = document.createElement('textarea');
+        textArea.value = fullText;
+        document.body.appendChild(textArea);
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+            const btn = document.querySelector('.btn-copy');
+            const originalText = btn.innerText;
+
+            btn.innerText = "Copied!";
+            btn.classList.add('btn-success');
+
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('btn-success');
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    // Attach the event listener programmatically
+    document.getElementById('copy-error-btn').addEventListener('click', copyError);
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+#install-container {
+    margin-bottom: 10em;
+}
+
+#ajax-message {
+    display: none;
+}
+
+#install-form {
+    min-height: 400px;
+}
+
+#wizard-button-row {
+    margin-top: 1em;
+    text-align: right;
+}
+
+#install-modal {
+    display: none;
+}
+
+#install-result {
+    display: flex;
+    justify-content: center;
+    padding-top: 3em;
+}
+
+.toggle-password {
+    margin-left: 34.5em; !important;
+}
+
+#connecting-message {
+    text-align: center;
+    margin-top: 6em;
+    margin-bottom: 2em;
+    font-size: 150%;
+    color: #00357B
+}
+
+div .progress-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#db-progress-bar {
+    width: 25em;
+    height: 1em;
+}
+
+#installing-tables-message {
+    text-align: center;
+    margin-top: 6em;
+    margin-bottom: 2em;
+    font-size: 150%;
+    color: #00357B
+}
+
+#tables-progress-bar {
+    width: 25em;
+    height: 1em;
+}

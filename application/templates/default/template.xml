@@ -1,0 +1,10 @@
+<theme>
+    <author>Plexis Dev Team</author>
+    <version>1.0</version>
+    <scripts>
+        <script type="text/javascript" src="js/theme.js" />
+    </scripts>
+    <stylesheets>
+
+    </stylesheets>
+</theme>

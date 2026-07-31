@@ -1,0 +1,55 @@
+article h1 {
+    color: #3f525f;
+    font-size: 1.5em;
+    -moz-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+    -webkit-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+    margin-bottom: 0em;
+}
+.error-page {
+    text-align: center;
+}
+.error-page h1 {
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 16em;
+    color: #A1A8AB;
+    -moz-text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+    -webkit-text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+}
+.error-page p {
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+    text-transform: uppercase;
+    -moz-text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+    -webkit-text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.35), 1px 1px 1px rgba(255, 255, 255, 0.75);
+}
+.error-page section {
+    z-index: 89;
+    left: 50%;
+    width: 28em;
+    margin-left: -14em;
+}
+.error-page section .action-tabs {
+    padding-top: 1em;
+}
+.error-page section .action-tabs.on-form {
+    padding-top: 1.75em;
+}
+.error-page section form.block-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+.error-page section form.block-content #s {
+    width: 15em;
+}
+
+div .block-content {
+    padding-top: 1.667em; /* Erase */
+}

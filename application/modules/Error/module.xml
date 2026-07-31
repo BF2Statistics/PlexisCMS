@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <info>
+        <name>Plexis Error Handler</name>
+        <description></description>
+        <author>Plexis Dev Team</author>
+        <authorEmail/>
+        <authorUrl/>
+        <copyright/>
+        <version>1.0.0</version>
+    </info>
+    <config>
+        <hasAdmin>false</hasAdmin>
+    </config>
+    <router>
+        <controller>InternalController</controller>
+    </router>
+</module>
