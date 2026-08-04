@@ -9,7 +9,9 @@
  * @license:      GNU GPL v3
  */
 namespace System\IO;
+use System\Convert;
 use System\ObjectDisposedException;
+use System\Security\SecurityException;
 
 /**
  * Provides properties and instance methods for various folder operations
@@ -130,7 +132,7 @@ class DirectoryInfo
      *
      * @return FileInfo[] A list object filled with FileInfo objects
      *
-     * @throws \System\Security\SecurityException
+     * @throws SecurityException
      */
     public function getFiles(?string $searchPattern = null): array
     {
@@ -168,7 +170,7 @@ class DirectoryInfo
      *
      * @return DirectoryInfo[] A list object filled with DirectoryInfo objects
      *
-     * @throws \System\Security\SecurityException
+     * @throws SecurityException
      */
     public function getDirectories(?string $searchPattern = null): array
     {
@@ -261,21 +263,22 @@ class DirectoryInfo
      * @param string $destinationName The full path to move the contents of this
      *   folder to.
      *
-     * @return bool Returns the success value of the folder being moved.
-     *@throws \System\Security\SecurityException Thrown if the destination directory could not be opened
+     * @return void
+     *
+     * @throws SecurityException Thrown if the destination directory could not be opened
      *   for various security reasons such as permissions.
      *
-     * @throws \System\IO\IOException Thrown if there was an error creating the new directory path
+     * @throws IOException Thrown if there was an error creating the new directory path
      */
-    public function moveTo(string $destinationName): bool
+    public function moveTo(string $destinationName): void
     {
         // Make sure the destination directory exists
         if (is_dir($destinationName))
             throw new IOException("Destination directory \"{$destinationName}\" already exists.", 1);
 
         // Rename this directory
-        if (@rename($this->rootPath, $destinationName) == false)
-            return false;
+        if (@rename($this->rootPath, $destinationName) === false)
+            throw new IOException("Failed to move directory \"{$this->rootPath}\" to \"{$destinationName}\".");
 
         // Clear stats cache
         clearstatcache();
@@ -284,15 +287,13 @@ class DirectoryInfo
         $this->rootPath = $destinationName;
         $this->parentDir = dirname($this->rootPath);
         $this->refresh();
-
-        return true;
     }
 
     /**
      * Deletes this instance of a DirectoryInfo, and all subdirectories and files.
      *
      * @return void
-     *@throws \Exception|\System\IO\IOException Thrown if there is an error Removing the directory
+     *@throws \Exception|IOException Thrown if there is an error Removing the directory
      * @throws \System\ObjectDisposedException Thrown if the directory was deleted prior to calling
      *      this method.
      */
@@ -327,12 +328,12 @@ class DirectoryInfo
         foreach ($this->filelist as $f)
         {
             // Throw exception if there is an error removing a file
-            if (@unlink($f->fullName()) == false)
+            if (@unlink($f->fullName()) === false)
                 throw new IOException("Could not remove file: " . $f->fullName());
         }
 
         // Remove self
-        if (@rmdir($this->rootPath) == false)
+        if (@rmdir($this->rootPath) === false)
         {
             $error = error_get_last();
             $message = $error["message"] ?? "Could not remove directory: {$this->rootPath}";
@@ -424,7 +425,7 @@ class DirectoryInfo
             }
         }
 
-        return ($format) ? $this->formatSize($size) : $size;
+        return ($format) ? Convert::BytesToUnits($size) : $size;
     }
 
     /**
@@ -434,19 +435,7 @@ class DirectoryInfo
      */
     public function isWritable(): bool
     {
-        // Fix path, and Create a tmp file
-        $file = $this->rootPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()) . '.tmp';
-
-        // check tmp file for read/write capabilities
-        $handle = @fopen($file, 'a');
-        if ($handle === false)
-            return false;
-
-        // Close the folder and remove the temp file
-        fclose($handle);
-        unlink($file);
-
-        return true;
+        return is_writable($this->rootPath);
     }
 
     /**
@@ -454,7 +443,7 @@ class DirectoryInfo
      * variables.
      *
      * @return void
-     * @throws \System\Security\SecurityException Thrown if the folder was not able to be opened
+     * @throws SecurityException Thrown if the folder was not able to be opened
      *
      */
     public function refresh(): void
@@ -462,7 +451,7 @@ class DirectoryInfo
         // Open the directory
         $handle = @opendir($this->rootPath);
         if ($handle === false)
-            throw new \System\Security\SecurityException('Unable to open folder "' . $this->rootPath . '"');
+            throw new SecurityException('Unable to open folder "' . $this->rootPath . '"');
 
         // Refresh vars
         $this->subdirs = [];
@@ -472,7 +461,7 @@ class DirectoryInfo
         while (false !== ($f = readdir($handle)))
         {
             // Skip "." and ".." directories
-            if ($f == "." || $f == "..") continue;
+            if ($f === "." || $f === "..") continue;
 
             // make sure we establish the full path to the file again
             $file = $this->rootPath . DIRECTORY_SEPARATOR . $f;
@@ -492,26 +481,11 @@ class DirectoryInfo
     }
 
     /**
-     * Formats a file size to human readable format
-     *
-     * @param string|float|int The size in bytes
-     *
-     * @return string Returns a formatted size ( Ex: 32.6 MB )
-     */
-    protected function formatSize($size): string
-    {
-        $units = array(' B', ' KB', ' MB', ' GB', ' TB');
-        for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
-
-        return round($size, 2) . $units[$i];
-    }
-
-    /**
      * When used as a string, this object returns the full path to the folder.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->rootPath;
     }

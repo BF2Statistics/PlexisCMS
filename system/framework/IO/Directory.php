@@ -28,19 +28,30 @@ class Directory
      * @param string $path The directory path
      * @param int $chmod The (octal) chmod permissions to assign this directory
      *
-     * @return bool
+     * @return DirectoryInfo
+     *
+     * @throws IOException
      */
-    public static function CreateDirectory(string $path, int $chmod = 0755): bool
+    public static function CreateDirectory(string $path, int $chmod = 0755): DirectoryInfo
     {
         // If the directory exists, just return true
-        if (is_dir($path))
-            return true;
+        if (!is_dir($path))
+        {
+            $oldUmask = umask(0);
+            $result = @mkdir($path, $chmod, true);
+            umask($oldUmask);
 
-        $oldUmask = umask(0);
-        $result = @mkdir($path, $chmod, true);
-        umask($oldUmask);
+            if (!$result)
+            {
+                $parent = dirname($path);
+                if (!is_dir($parent) && !is_writable($parent))
+                    throw new IOException("Cannot create directory \"{$path}\": parent is not writable.");
 
-        return $result;
+                throw new IOException("Failed to create directory: \"{$path}\"");
+            }
+        }
+
+        return new DirectoryInfo($path);
     }
 
     /**
@@ -219,10 +230,25 @@ class Directory
      */
     public static function GetFileSystemEntries(string $path, ?string $searchPattern = null): array
     {
-        $dirs = self::GetDirectories($path, $searchPattern);
-        $files = self::GetFiles($path, $searchPattern);
+        if (!is_dir($path))
+            throw new DirectoryNotFoundException("Directory \"{$path}\" does not exist");
 
-        return array_merge($dirs, $files);
+        $handle = @opendir($path);
+        if ($handle === false)
+            throw new SecurityException('Unable to open folder "' . $path . '"');
+
+        $entries = [];
+        while (false !== ($f = readdir($handle)))
+        {
+            if ($f === "." || $f === "..") continue;
+
+            if (!empty($searchPattern) && !preg_match("/" . preg_quote($searchPattern, '/') . "/i", $f))
+                continue;
+
+            $entries[] = Path::Combine($path, $f);
+        }
+        closedir($handle);
+        return $entries;
     }
 
     /**
@@ -277,7 +303,11 @@ class Directory
             throw new IOException("Destination directory \"{$destination}\" already exists.", 1);
 
         // Rename the directory
-        return @rename($source, $destination);
+        $result = @rename($source, $destination);
+        if (!$result)
+            throw new IOException("Failed to move directory \"{$source}\" to \"{$destination}\".");
+
+        return true;
     }
 
     /**
@@ -341,14 +371,6 @@ class Directory
      */
     public static function IsWritable(string $path): bool
     {
-        try
-        {
-            $dir = new DirectoryInfo($path, false);
-            return $dir->isWritable();
-        }
-        catch (\Exception $e)
-        {
-            return false;
-        }
+        return is_dir($path) && is_writable($path);
     }
 }

@@ -43,9 +43,9 @@ class FileInfo
      * @param string $path The full path the the file
      * @param bool $create Create the file if it doesn't exist?
      *
-     * @throws \System\IO\IOException Thrown if the $path directory doesn't exist,
+     * @throws IOException Thrown if the $path directory doesn't exist,
      *   $create is set to true, and there was an error creating the file.
-     * @throws \System\IO\FileNotFoundException If the $path file does not exist, and $create is set to false.
+     * @throws FileNotFoundException If the $path file does not exist, and $create is set to false.
      * @throws \Exception Thrown if the $path is not a file at all, but rather a directory
      */
     public function __construct(string $path, bool $create = false)
@@ -136,16 +136,19 @@ class FileInfo
      *
      * @return bool Returns whether the operation was successful
      *
-     * @throws ObjectDisposedException
      * @throws IOException Thrown if there was an error opening, or writing to the file.
      */
-    public function appendText($stringData): bool
+    public function appendText(string $stringData): bool
     {
-        $File = new FileStream($this->filePath, FileStream::WRITE);
-        $wrote = $File->write($stringData);
-        $File->close();
+        $result = @file_put_contents($this->filePath, $stringData, FILE_APPEND | LOCK_EX);
+        if ($result === false)
+        {
+            if (!is_writable($this->filePath))
+                throw new IOException("File \"{$this->filePath}\" is not writable.");
 
-        return $wrote !== false;
+            throw new IOException("Failed to append to file: \"{$this->filePath}\"");
+        }
+        return true;
     }
 
     /**
@@ -157,7 +160,7 @@ class FileInfo
      */
     public function open(): FileStream
     {
-        return new FileStream($this->filePath, FileStream::READWRITE);
+        return new FileStream($this->filePath, FileMode::Open, FileAccess::ReadWrite);
     }
 
     /**
@@ -169,7 +172,7 @@ class FileInfo
      */
     public function openRead(): FileStream
     {
-        return new FileStream($this->filePath, FileStream::READ);
+        return new FileStream($this->filePath, FileMode::Open, FileAccess::Read);
     }
 
     /**
@@ -181,7 +184,7 @@ class FileInfo
      */
     public function openWrite(): FileStream
     {
-        return new FileStream($this->filePath, FileStream::WRITE);
+        return new FileStream($this->filePath, FileMode::Open, FileAccess::Write);
     }
 
     /**
@@ -194,16 +197,22 @@ class FileInfo
      * @return void
      *
      * @throws DirectoryNotFoundException if the directory specified in fileName does not exist.
+     * @throws IOException
      */
     public function moveTo(string $newPath): void
     {
-        // Copy this file's contents to the new
-        $this->copyTo($newPath, true);
+        $dir = dirname($newPath);
+        if (!is_dir($dir))
+            throw new DirectoryNotFoundException("Could not find part of path: " . $dir);
 
-        // Delete old file
-        @unlink($this->filePath);
+        if (!@rename($this->filePath, $newPath))
+        {
+            // Cross-device fallback
+            $this->copyTo($newPath, true);
+            if (!@unlink($this->filePath))
+                throw new IOException("Failed to remove original file: \"{$this->filePath}\"");
+        }
 
-        // Reset class vars
         $this->filePath = $newPath;
         $this->parentDir = dirname($newPath);
     }
@@ -254,20 +263,18 @@ class FileInfo
     /**
      * Completely removes all contents of the file
      *
-     * @return bool Returns true on success, false otherwise
+     * @return void
+     *
+     * @throws IOException Thrown if the file could not be truncated.
      */
-    public function truncate(): bool
+    public function truncate(): void
     {
         $f = @fopen($this->filePath, "r+");
-        if ($f !== false)
-        {
-            ftruncate($f, 0);
-            fclose($f);
+        if ($f === false)
+            throw new IOException("Could not open file for truncation: \"{$this->filePath}\"");
 
-            return true;
-        }
-
-        return false;
+        ftruncate($f, 0);
+        fclose($f);
     }
 
     /**
@@ -353,15 +360,7 @@ class FileInfo
      */
     public function isWritable(): bool
     {
-        // Attempt to open the file, and read contents
-        $handle = @fopen($this->filePath, 'a');
-        if ($handle === false)
-            return false;
-
-        // Close the file, return true
-        fclose($handle);
-
-        return true;
+        return is_writable($this->filePath);
     }
 
     /**
@@ -371,45 +370,24 @@ class FileInfo
      */
     public function isReadable(): bool
     {
-        // Attempt to open the file, and read contents
-        $handle = @fopen($this->filePath, 'r');
-        if ($handle === false)
-            return false;
-
-        // Close the file, return true
-        fclose($handle);
-
-        return true;
+        return is_readable($this->filePath);
     }
 
     /**
      * Permanently deletes the file.
      *
-     * @return bool True if the file was successfully deleted.
+     * @return void
      *
      * @throws FileNotFoundException If the file does not exist.
+     * @throws IOException Thrown if the file could not be deleted.
      */
-    public function delete(): bool
+    public function delete(): void
     {
         if (!file_exists($this->filePath))
             throw new FileNotFoundException("File '{$this->filePath}' does not exist");
 
-        return @unlink($this->filePath);
-    }
-
-    /**
-     * Formats a file size to human readable format
-     *
-     * @param string|float|int The size in bytes
-     *
-     * @return string Returns a formatted size ( Ex: 32.6 MB )
-     */
-    protected function formatSize($size): string
-    {
-        $units = array(' B', ' KB', ' MB', ' GB', ' TB');
-        for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
-
-        return round($size, 2) . $units[$i];
+        if (!@unlink($this->filePath))
+            throw new IOException("Failed to delete file: '{$this->filePath}'");
     }
 
     /**

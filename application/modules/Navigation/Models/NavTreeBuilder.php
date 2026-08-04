@@ -14,6 +14,7 @@
 
 namespace Modules\Navigation\Models;
 
+use JetBrains\PhpStorm\ArrayShape;
 use System\Cache\CacheService;
 use System\Database\DbConnection;
 use System\Database\DbFactory;
@@ -50,6 +51,20 @@ class NavTreeBuilder
      *
      * @throws \Exception
      */
+    #[ArrayShape([
+        'id'           => 'int',
+        'parent_id'    => 'int|null',
+        'label'        => 'string',
+        'title'        => 'string',
+        'href'         => 'string',
+        'route_names'  => 'array',
+        'icon'         => 'string',
+        'target'       => 'string',
+        'hasSeparator' => 'bool',
+        'isCurrent'    => 'bool',
+        'isActive'     => 'bool',
+        'children'     => 'array',
+    ])]
     public function getTree(Request $request, string $tableName): array
     {
         $cache = CacheService::Default();
@@ -76,6 +91,20 @@ class NavTreeBuilder
      *
      * @throws \Exception
      */
+    #[ArrayShape([
+        'id'           => 'int',
+        'parent_id'    => 'int|null',
+        'label'        => 'string',
+        'title'        => 'string',
+        'href'         => 'string',
+        'route_names'  => 'array',
+        'icon'         => 'string',
+        'target'       => 'string',
+        'hasSeparator' => 'bool',
+        'isCurrent'    => 'bool',
+        'isActive'     => 'bool',
+        'children'     => 'array',
+    ])]
     protected function buildTree(Request $request, string $tableName): array
     {
         // Fetch Raw Data (Flat List)
@@ -108,6 +137,20 @@ class NavTreeBuilder
     /**
      * Converts flat database rows into a nested array structure.
      */
+    #[ArrayShape([
+        'id'           => 'int',
+        'parent_id'    => 'int|null',
+        'label'        => 'string',
+        'title'        => 'string',
+        'href'         => 'string',
+        'route_names'  => 'array',
+        'icon'         => 'string',
+        'target'       => 'string',
+        'hasSeparator' => 'bool',
+        'isCurrent'    => 'bool',
+        'isActive'     => 'bool',
+        'children'     => 'array',
+    ])]
     private function buildAdjacencyList(array $rows, string $baseUrl): array
     {
         $itemsById = [];

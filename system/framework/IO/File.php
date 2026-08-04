@@ -29,18 +29,21 @@ class File
      *        file we are creating
      * @param bool $returnStream Return the FileStream for reading/writing?
      *
-     * @return FileStream|null
+     * @return ?FileStream
      *
-     * @throws IOException Thrown this method is unable to create the file
+     * @throws IOException Thrown this method is unable to create the file, or if
+     *  the file already exists
+     * @throws DirectoryNotFoundException Thrown if the parent directory does not exist when creating a new file
      */
     public static function Create(string $path, bool $returnStream = false): ?FileStream
     {
-        $Stream = new FileStream($path);
+        $stream = new FileStream($path, FileMode::CreateNew, FileAccess::Write);
         if ($returnStream)
-            return $Stream;
+        {
+            return $stream;
+        }
 
-        $Stream->close();
-
+        $stream->close();
         return null;
     }
 
@@ -74,42 +77,52 @@ class File
      * Opens a FileStream on the specified path with read/write access
      *
      * @param string $path The full path, including file name to the file.
+     * @param FileMode $mode The mode in which to open the file.
      *
      * @return FileStream
      *
      * @throws IOException Thrown if there was an error opening the file.
+     * @throws FileNotFoundException Thrown if the file does not exist and the
+     *         mode is FileMode::Open or FileMode::Truncate.
      *
      */
-    public static function Open(string $path): FileStream
+    public static function Open(string $path, FileMode $mode): FileStream
     {
-        return new FileStream($path, FileStream::READWRITE);
+        return new FileStream($path, $mode, FileAccess::ReadWrite);
     }
 
     /**
      * Opens a FileStream on the specified path with write access
      *
      * @param string $filePath The full path, including file name to the file.
+     * @param FileMode $mode The mode in which to open the file.
      *
      * @return FileStream
-     * @throws IOException Thrown if there was an error opening the file.
      *
+    *  @throws IOException Thrown if there was an error opening the file.
+     * @throws FileNotFoundException Thrown if the file does not exist and the
+     *          mode is FileMode::Open or FileMode::Truncate.
      */
-    public static function OpenWrite(string $filePath): FileStream
+    public static function OpenWrite(string $filePath, FileMode $mode): FileStream
     {
-        return new FileStream($filePath, FileStream::WRITE);
+        return new FileStream($filePath, $mode, FileAccess::Write);
     }
 
     /**
      * Opens a FileStream on the specified path with read access
      *
      * @param string $filePath The full path, including file name to the file.
+     * @param FileMode $mode The mode in which to open the file.
      *
      * @return FileStream
+     *
      * @throws IOException Thrown if there was an error opening the file.
+     * @throws FileNotFoundException Thrown if the file does not exist and the
+     *           mode is FileMode::Open or FileMode::Truncate.
      */
-    public static function OpenRead(string $filePath): FileStream
+    public static function OpenRead(string $filePath, FileMode $mode): FileStream
     {
-        return new FileStream($filePath, FileStream::READ);
+        return new FileStream($filePath, $mode, FileAccess::Read);
     }
 
     /**
@@ -122,10 +135,9 @@ class File
      * @param string[] $lines An array of lines to write to the file.
      *
      * @return bool Returns whether the operation was successful
-     *@throws InvalidArgumentException Thrown if $lines is not an array, or ListObject
+     * @throws InvalidArgumentException Thrown if $lines is not an array, or ListObject
      *
      * @throws IOException Thrown if there was an error opening, or creating the file.
-     * @throws ObjectDisposedException
      */
     public static function AppendAllLines(string $filePath, array $lines): bool
     {
@@ -141,21 +153,24 @@ class File
      * @param string $filePath The full path, including file name to the file.
      * @param string $stringData The data string to write to the file
      *
-     * @return bool Returns whether the operation was successful
+     * @return void
      *
-     * @throws IOException
-     * @throws ObjectDisposedException
+     * @throws IOException Thrown if there was an error writing to the file.
+     * @throws FileNotFoundException Thrown if the file does not exist
      */
-    public static function AppendAllText(string $filePath, string $stringData): bool
+    public static function AppendAllText(string $filePath, string $stringData): void
     {
-        // Get filestream
-        $file = new FileStream($filePath, FileStream::WRITE);
+        $result = @file_put_contents($filePath, $stringData, FILE_APPEND | LOCK_EX);
+        if ($result === false)
+        {
+            if (!is_file($filePath))
+                throw new FileNotFoundException("File \"{$filePath}\" does not exist.");
 
-        // Write file contents
-        $wrote = $file->write($stringData);
-        $file->close();
+            if (!is_writable($filePath))
+                throw new IOException("File \"{$filePath}\" is not writable.");
 
-        return $wrote !== false;
+            throw new IOException("Failed to append to file: \"{$filePath}\"");
+        }
     }
 
     /**
@@ -164,8 +179,8 @@ class File
      * @param string $filePath The full path, including file name to the file.
      *
      * @return string[]
-     *@throws IOException Thrown if there was an error opening the file.
      *
+     * @throws IOException Thrown if there was an error opening or reading the file.
      * @throws FileNotFoundException Thrown if the file does not exist
      */
     public static function ReadAllLines(string $filePath): array
@@ -182,18 +197,27 @@ class File
      * @throws IOException Thrown if there was an error opening the file.
      *
      * @throws FileNotFoundException Thrown if the file does not exist
-     * @throws \System\ObjectDisposedException
+     * @throws IOException Thrown if the file cannot be opened or read from
      */
     public static function ReadAllText(string $filePath): string
     {
-        // Ensure the file exists
-        if (!file_exists($filePath))
-            throw new FileNotFoundException("File \"{$filePath}\" does not exist");
+        // Attempt to read the contents of the file. This will return false if
+        // the file does not exist, is not readable, or any other error.
+        $contents = @file_get_contents($filePath);
+        if ($contents === false)
+        {
+            // Check if file is readable. This will return false also if the file does not exist
+            if (!is_readable($filePath))
+            {
+                // Ensure the file exists
+                if (!is_file($filePath))
+                    throw new FileNotFoundException("File \"{$filePath}\" does not exist");
+                else
+                    throw new IOException("File \"{$filePath}\" is not readable");
+            }
 
-        // Read the contents from the file
-        $file = new FileStream($filePath, FileStream::READ);
-        $contents = $file->readToEnd();
-        $file->close();
+            throw new IOException("Failed to read file contents on file: \"{$filePath}\"");
+        }
 
         // Return the file contents
         return $contents;
@@ -205,15 +229,15 @@ class File
      * @param string $filePath The full path, including file name to the file.
      * @param string[] $lines An array of lines to write to the file.
      *
-     * @return bool Returns whether the operation was successful
+     * @return void
      *
      * @throws InvalidArgumentException Thrown if $lines is not an array, or ListObject
      * @throws IOException Thrown if there was an error opening, or creating the file.
-     * @throws ObjectDisposedException
+     * @throws DirectoryNotFoundException Thrown if the parent directory does not exist.
      */
-    public static function WriteAllLines(string $filePath, array $lines): bool
+    public static function WriteAllLines(string $filePath, array $lines): void
     {
-        return self::WriteAllText($filePath, implode(PHP_EOL, $lines));
+        self::WriteAllText($filePath, implode(PHP_EOL, $lines));
     }
 
     /**
@@ -222,64 +246,25 @@ class File
      * @param string $filePath The full path, including file name to the file.
      * @param string $stringData The data string to write to the file
      *
-     * @return bool Thrown if there was an error opening, or creating the file.
+     * @return void
      *
      * @throws IOException Thrown if there was an error opening, or creating the file.
-     * @throws ObjectDisposedException
-     *
+     * @throws DirectoryNotFoundException
      */
-    public static function WriteAllText(string $filePath, string $stringData): bool
+    public static function WriteAllText(string $filePath, string $stringData): void
     {
-        // Get file stream
-        $file = new FileStream($filePath, 'w');
-
-        // Write file contents
-        $wrote = $file->write($stringData);
-        $file->close();
-
-        return $wrote !== false;
-    }
-
-    /**
-     * Opens a binary file, reads all contents as bytes, and closes the file.
-     *
-     * @param string $filePath The file to read.
-     *
-     * @return string The raw binary contents of the file.
-     *
-     * @throws FileNotFoundException If the file does not exist.
-     * @throws IOException If the file could not be read.
-     */
-    public static function ReadAllBytes(string $filePath): string
-    {
-        if (!is_file($filePath))
-            throw new FileNotFoundException("File \"{$filePath}\" does not exist");
-
-        $contents = file_get_contents($filePath);
-        if ($contents === false)
-            throw new IOException("Unable to read file \"{$filePath}\"");
-
-        return $contents;
-    }
-
-    /**
-     * Creates a new file, writes the specified byte data, and closes the file.
-     * If the file already exists, it is overwritten.
-     *
-     * @param string $filePath The file to write to.
-     * @param string $data The raw binary data to write.
-     *
-     * @return int The number of bytes written.
-     *
-     * @throws IOException If the file could not be written.
-     */
-    public static function WriteAllBytes(string $filePath, string $data): int
-    {
-        $result = file_put_contents($filePath, $data);
+        $result = @file_put_contents($filePath, $stringData);
         if ($result === false)
-            throw new IOException("Unable to write to file \"{$filePath}\"");
+        {
+            $dir = dirname($filePath);
+            if (!is_dir($dir))
+                throw new DirectoryNotFoundException("Directory \"{$dir}\" does not exist.");
 
-        return $result;
+            if (is_file($filePath) && !is_writable($filePath))
+                throw new IOException("File \"{$filePath}\" is not writable.");
+
+            throw new IOException("Failed to write to file: \"{$filePath}\"");
+        }
     }
 
     /**
@@ -297,7 +282,6 @@ class File
      * @throws FileNotFoundException
      * @throws IOException Thrown if there was an error moving the file, or
      *     creating the destination file's directory if it did not exist
-     * @throws SecurityException
      */
     public static function Move(string $source, string $destination): void
     {
@@ -361,16 +345,6 @@ class File
      */
     public static function IsWritable(string $path): bool
     {
-        try
-        {
-            $file = new FileStream($path, 'r+');
-            $canWrite = $file->canWrite();
-            $file->close();
-            return $canWrite;
-        }
-        catch (\Exception $e)
-        {
-            return false;
-        }
+        return is_file($path) && is_writable($path);
     }
 }

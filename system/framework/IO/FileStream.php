@@ -23,15 +23,6 @@ use System\ObjectDisposedException;
  */
 class FileStream
 {
-    // FileMode constant for Read + Write
-    const string READWRITE = "a+";
-
-    // FileMode constant Read Only
-    const string READ = "r";
-
-    // FileMode constant Write Only
-    const string WRITE = "a";
-
     /**
      * The file stream
      * @var Resource
@@ -68,51 +59,63 @@ class FileStream
     protected bool $isClosed = false;
 
     /**
-     * Specifies which file modes allow reading
-     * @var  string[]
+     * Gets or sets the buffer size when reading chunks
+     * @var int
      */
-    protected static array $readModes = ['r', 'r+', 'w+', 'a+', 'x+', 'c+'];
-
-    /**
-     * Specifies which file modes allow writing
-     * @var  string[]
-     */
-    protected static array $writeModes = ['w', 'a', 'x', 'w+', 'a+', 'x+', 'r+', 'c', 'c+'];
+    public int $bufferSize = 8192;
 
     /**
      * Constructor
      *
      * @param string $file The full path to the file. If the file does not exist, it will be created
-     * @param string $mode The Read / Write mode of the file (See class Constants READ,
-     *     WRITE, READWRITE etc ).
+     * @param FileMode $mode The file mode to use
+     * @param FileAccess $access The file access to use
      *
      * @throws IOException Thrown if opening of the file stream failed for any reason
+     * @throws FileNotFoundException Thrown if the file does not exist
+     * @throws DirectoryNotFoundException Thrown if the parent directory does not exist when creating a new file
      */
-    public function __construct(string $file, string $mode = self::READWRITE)
-    {
-        // Open the file stream
-        $this->path = $file;
-        $this->stream = @fopen($file, $mode);
+    public function __construct(
+        string $file,
+        FileMode $mode = FileMode::OpenOrCreate,
+        FileAccess $access = FileAccess::ReadWrite
+    ) {
+        // Existing check: file must exist for Open/Truncate
+        if ($mode === FileMode::Open || $mode === FileMode::Truncate)
+        {
+            if (!is_file($file))
+                throw new FileNotFoundException("File \"{$file}\" does not exist.");
+        }
 
-        // Make sure our stream is valid
+        // For CreateNew, give a clear message if file already exists
+        if ($mode === FileMode::CreateNew && is_file($file))
+        {
+            throw new IOException("File \"{$file}\" already exists.");
+        }
+
+        // NEW: For modes that create files, check the parent directory
+        if ($mode === FileMode::Create || $mode === FileMode::CreateNew || $mode === FileMode::OpenOrCreate)
+        {
+            $dir = dirname($file);
+            if (!is_dir($dir))
+                throw new DirectoryNotFoundException("Directory \"{$dir}\" does not exist.");
+        }
+
+        $phpMode = self::ResolveMode($mode, $access);
+        $this->path = $file;
+        $this->stream = @fopen($file, $phpMode);
+
         if (empty($this->stream))
         {
             $error = error_get_last();
-            if ($error === null)
-                throw new IOException("Unable to open file stream for file \"{$file}\".");
-            else
-                throw new IOException($error["message"]);
+            throw new IOException($error['message'] ?? "Unable to open file stream for \"{$file}\".");
         }
 
-        /**
-         * Set readable and writable status of the stream
-         * Replace both b and t flags, as we don't care about those.
-         */
-        $this->mode = str_replace(['b', 't'], '', $mode);
-        $this->canRead = in_array($this->mode, self::$readModes);
-        $this->canWrite = in_array($this->mode, self::$writeModes);
+        $this->mode = $phpMode;
+        $this->canRead = $access === FileAccess::Read || $access === FileAccess::ReadWrite;
+        $this->canWrite = $access === FileAccess::Write || $access === FileAccess::ReadWrite;
 
-        // Set write buffer to 0 to prevent multiple streams on this file messing up
+        // Set the write buffer to 0 to prevent multiple access to the stream prevent an error
         stream_set_write_buffer($this->stream, 0);
     }
 
@@ -165,20 +168,8 @@ class FileStream
             return ($line === false) ? null : $line;
         }
 
-        $result = "";
-        while (!feof($this->stream))
-        {
-            $tmp = fgetc($this->stream);
-            if ($tmp === false)
-                break;
-
-            if ($tmp === $delim)
-                return $result;
-
-            $result .= $tmp;
-        }
-
-        return ($result === '') ? null : $result;
+        $line = stream_get_line($this->stream, $this->bufferSize, $delim);
+        return ($line === false) ? null : $line;
     }
 
     /**
@@ -215,12 +206,9 @@ class FileStream
         $this->ensureCanRead();
 
         // Read the stream until the end of file
-        $result = "";
-        while (!feof($this->stream))
-        {
-            // Read next character
-            $result .= fread($this->stream, 4096);
-        }
+        $result = stream_get_contents($this->stream);
+        if ($result === false)
+            throw new IOException("Failed to read from stream.");
 
         return $result;
     }
@@ -493,19 +481,6 @@ class FileStream
     }
 
     /**
-     * Returns the underlying file stream resource.
-     *
-     * @return resource
-     *
-     * @throws ObjectDisposedException The stream is closed.
-     */
-    public function getStream(): mixed
-    {
-        $this->checkDisposed();
-        return $this->stream;
-    }
-
-    /**
      * Returns whether the stream position is at the end of the stream.
      *
      * @return bool
@@ -545,18 +520,12 @@ class FileStream
         $this->ensureCanRead();
         $destination->ensureCanWrite();
 
-        $totalBytes = 0;
-        while (!feof($this->stream))
-        {
-            $data = fread($this->stream, $bufferSize);
-            if ($data === false || $data === '')
-                break;
+        // Copy from this stream to the destination stream
+        $bytes = stream_copy_to_stream($this->stream, $destination->stream, -1);
+        if ($bytes === false)
+            throw new IOException("Failed to copy stream.");
 
-            $written = $destination->write($data);
-            $totalBytes += $written;
-        }
-
-        return $totalBytes;
+        return $bytes;
     }
 
     /**
@@ -587,11 +556,12 @@ class FileStream
     public function close(): void
     {
         // Don't call close multiple times
-        if ($this->isClosed || !is_resource($this->stream)) return;
+        if ($this->isClosed) return;
 
-        // Flush and close the Stream
-        fflush($this->stream);
-        fclose($this->stream);
+        // Close the stream if it is open
+        if (is_resource($this->stream))
+            fclose($this->stream);
+
         $this->isClosed = true;
     }
 
@@ -605,7 +575,7 @@ class FileStream
     protected function checkDisposed(): void
     {
         // Ensure we can write to this stream
-        if ($this->isClosed || !is_resource($this->stream))
+        if ($this->isClosed)
             throw new ObjectDisposedException("The stream is closed.");
     }
 
@@ -645,5 +615,41 @@ class FileStream
     public function __destruct()
     {
         $this->close();
+    }
+
+    private static function ResolveMode(FileMode $mode, FileAccess $access): string
+    {
+        return match (true)
+        {
+            // CreateNew: file must NOT exist
+            $mode === FileMode::CreateNew && $access === FileAccess::Write      => 'x',
+            $mode === FileMode::CreateNew && $access === FileAccess::ReadWrite  => 'x+',
+
+            // Create: create or overwrite
+            $mode === FileMode::Create && $access === FileAccess::Write         => 'w',
+            $mode === FileMode::Create && $access === FileAccess::ReadWrite     => 'w+',
+
+            // Open: file must exist
+            $mode === FileMode::Open && $access === FileAccess::Read            => 'r',
+            $mode === FileMode::Open && $access === FileAccess::Write           => 'r+',
+            $mode === FileMode::Open && $access === FileAccess::ReadWrite       => 'r+',
+
+            // OpenOrCreate: open if exists, create if not
+            $mode === FileMode::OpenOrCreate && $access === FileAccess::Write   => 'c',
+            $mode === FileMode::OpenOrCreate && $access === FileAccess::Read    => 'c',
+            $mode === FileMode::OpenOrCreate && $access === FileAccess::ReadWrite => 'c+',
+
+            // Truncate: file must exist, truncate to zero (check existence first)
+            $mode === FileMode::Truncate && $access === FileAccess::Write       => 'w',
+            $mode === FileMode::Truncate && $access === FileAccess::ReadWrite   => 'w+',
+
+            // Append: always write at end
+            $mode === FileMode::Append && $access === FileAccess::Write         => 'a',
+            $mode === FileMode::Append && $access === FileAccess::ReadWrite     => 'a+',
+
+            default => throw new \InvalidArgumentException(
+                "Invalid FileMode/FileAccess combination: {$mode->name} + {$access->name}"
+            ),
+        };
     }
 }

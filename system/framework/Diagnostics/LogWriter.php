@@ -56,9 +56,9 @@ class LogWriter
 
     /**
      * The log files resource stream
-     * @var resource
+     * @var FileStream
      */
-    protected $file = false;
+    protected FileStream $file;
 
     /**
      * The level in which the logger should log

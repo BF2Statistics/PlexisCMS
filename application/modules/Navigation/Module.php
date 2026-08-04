@@ -80,7 +80,7 @@ class Module extends AbstractModule
 
     public static function GetDisplayName(): string
     {
-        return 'Plexis Home Page';
+        return 'Plexis Navigation Widget';
     }
 
     public static function GetDescription(): string
