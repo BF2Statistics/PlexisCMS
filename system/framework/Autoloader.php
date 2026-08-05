@@ -36,10 +36,9 @@ namespace System;
  * @package     System
  * @author      Steven Wilson
  * @license     GNU GPL v3
- * @copyright   Copyright 2025, Steven Wilson, All rights reserved.
- * @since       PHP 8.2 or newer
+ * @copyright   Copyright 2026, Steven Wilson, All rights reserved.
+ * @since       PHP 8.4.2 or newer
  */
-
 class Autoloader
 {
     /**
@@ -98,7 +97,7 @@ class Autoloader
     /**
      * Registers a path for the autoload to search for classes. Namespaced
      * and prefixed registered paths will be searched first if the class
-     * is namespaced, or prefixed.
+     * is namespaced or prefixed.
      *
      * @param string $path Full path to search for a class
      *
@@ -106,8 +105,9 @@ class Autoloader
      */
     public static function RegisterPath(string $path): void
     {
+        $path = rtrim(str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR);
         if (!in_array($path, self::$paths))
-            self::$paths[] = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
+            self::$paths[] = $path;
     }
 
     /**
@@ -124,18 +124,20 @@ class Autoloader
      */
     public static function RegisterNamespace(string $namespace, array|string $path): void
     {
-        // Make sure path is array
+        // Make sure path is an array
         if (!is_array($path))
         {
             // Fix path, providing correct directory separator
-            $path = array(str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path));
+            $path = [
+                rtrim( str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR )
+            ];
         }
         else
         {
             // Normalize paths and ensure uniqueness
             foreach ($path as &$p)
             {
-                $p = rtrim(str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $p), DIRECTORY_SEPARATOR);
+                $p = rtrim( str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $p), DIRECTORY_SEPARATOR );
             }
         }
 

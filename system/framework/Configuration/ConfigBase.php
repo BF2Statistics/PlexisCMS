@@ -10,6 +10,12 @@
  */
 namespace System\Configuration;
 
+use RuntimeException;
+use System\IO\DirectoryNotFoundException;
+use System\IO\File;
+use System\IO\FileNotFoundException;
+use System\IO\IOException;
+
 /**
  * Abstract ConfigBase class to manage configuration variables.
  * This class implements several standard PHP interfaces, including IteratorAggregate,
@@ -39,6 +45,25 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
     public abstract function __construct(string $_filepath);
 
     /**
+     * Validates the file path and sets it on the instance.
+     *
+     * @param string $filepath The file path to validate
+     * @return void
+     * @throws \InvalidArgumentException If the path is empty
+     * @throws \System\IO\FileNotFoundException If the file does not exist
+     */
+    protected function validateAndSetPath(string $filepath): void
+    {
+        if (empty($filepath))
+            throw new \InvalidArgumentException("Invalid file path provided");
+
+        if (!File::Exists($filepath))
+            throw new FileNotFoundException("Config file '{$filepath}' does not exist!");
+
+        $this->filePath = $filepath;
+    }
+
+    /**
      * Retrieves the value associated with the specified key.
      * If the key is a multi-dimensional array reference (e.g., "a.b.c"),
      * it will traverse the array to find the corresponding value.
@@ -52,7 +77,7 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
     public function get(string $key, mixed $defaultReturn = null): mixed
     {
         // Check if this is a multi-dimensional array
-        if (strpos($key, '.') !== false)
+        if (str_contains($key, '.'))
         {
             $args = explode('.', $key);
             $count = count($args);
@@ -98,13 +123,7 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
         // Are we setting an array of values?
         if (is_array($key))
         {
-            foreach ($key as $k => $v)
-            {
-                if (!$this->set($k, $v, $ifNotExists))
-                    return false;
-            }
-
-            return true;
+            return array_all($key, fn($v, $k) => $this->set($k, $v, $ifNotExists));
         }
         // Check if this is a multidimensional array
         else if (str_contains($key, '.'))
@@ -139,8 +158,6 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
             $this->variables[$key] = $value;
             return true;
         }
-
-        return false;
     }
 
     /**
@@ -151,11 +168,11 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
      * beforehand. Numeric values, arrays, and strings are all handled
      * appropriately to ensure proper PHP syntax in the generated file.
      *
-     * @return bool Returns true if the file was successfully written, otherwise false.
+     * @return void
      *
-     * @throws \System\IO\IOException thrown if there is an issue creating or modifying the configuration file.
+     * @throws IOException thrown if there is an issue creating or modifying the configuration file.
      */
-    public abstract function save(): bool;
+    public abstract function save(): void;
 
     /**
      * Retrieves all variables.
@@ -165,6 +182,30 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
     public function fetchAll(): array
     {
         return $this->variables;
+    }
+
+    /**
+     * Creates a backup of the current configuration file.
+     *
+     * @param int $maxRetries Maximum number of retries waiting for backup file
+     * @return void
+     * @throws IOException
+     * @throws DirectoryNotFoundException
+     * @throws FileNotFoundException
+     */
+    protected function backup(int $maxRetries = 25): void
+    {
+        File::Delete($this->filePath . '.bak');
+        File::Copy($this->filePath, $this->filePath . '.bak');
+
+        $retries = 0;
+        while (!File::Exists($this->filePath . '.bak'))
+        {
+            if (++$retries >= $maxRetries)
+                throw new RuntimeException("Backup failed: '{$this->filePath}.bak' was not created after {$maxRetries} attempts.");
+
+            usleep(200000);
+        }
     }
 
     // === Interface / Abstract Methods === //
@@ -232,24 +273,24 @@ abstract class ConfigBase implements \IteratorAggregate, \ArrayAccess, \Countabl
      * Serializes the data, and returns it.
      * This method is required by the interface Serializable.
      *
-     * @return string The serialized string
+     * @return array
      */
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize($this->variables);
+        return $this->variables;
     }
 
     /**
-     * Unserializes the data, and sets up the storage in this container
+     * Unserializes the data and sets up the storage in this container
      * This method is required by the interface Serializable.
      *
-     * @param string $data
+     * @param string[] $data
      *
      * @return void
      */
-    public function unserialize(string $data): void
+    public function __unserialize(array $data): void
     {
-        $this->variables = unserialize($data);
+        $this->variables = $data;
     }
 
     /**

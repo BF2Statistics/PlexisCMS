@@ -15,4 +15,5 @@ enum ConfigType {
     case JSON;
     case INI;
     case PHP;
+    case YAML;
 }

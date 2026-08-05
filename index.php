@@ -15,8 +15,8 @@
 /**
  * Define ROOT and system paths. This ensures all paths are consistent across the application.
  */
-const CODE_VERSION = '0.1.1';
-const CODE_VERSION_DATE = '2026-8-3';
+const CODE_VERSION = '0.1.2';
+const CODE_VERSION_DATE = '2026-8-4';
 const DS = DIRECTORY_SEPARATOR;
 const ROOT = __DIR__;
 const SYSTEM_DIR = ROOT . DS . 'system';

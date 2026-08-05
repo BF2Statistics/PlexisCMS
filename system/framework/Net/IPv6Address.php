@@ -30,7 +30,7 @@ class IPv6Address implements IPAddressInterface
     protected string $fullIpAddress = "";
 
     /**
-     * Indicates whether the IP address is local
+     * Indicates whether the IP address is local/private/reserved
      * @var bool
      */
     protected bool $isLocal;
@@ -42,8 +42,12 @@ class IPv6Address implements IPAddressInterface
      */
     public function __construct(string $address)
     {
-        // Check for CIDR ranges
+        // Check for CIDR ranges — reject them rather than silently stripping
         $parts = explode('/', $address);
+        if (count($parts) > 1)
+            throw new \InvalidArgumentException(
+                "CIDR notation is not supported in the constructor. Use isInCidr() for range checks."
+            );
 
         // Make sure IP is valid!
         if (!filter_var($parts[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
@@ -56,11 +60,21 @@ class IPv6Address implements IPAddressInterface
     }
 
     /**
-     * Indicates whether the specified IP address is the loopback address.
+     * Returns true only for the loopback address (::1).
      *
      * @return bool
      */
     public function isLoopback(): bool
+    {
+        return ($this->ipAddress === '::1' || $this->fullIpAddress === '0000:0000:0000:0000:0000:0000:0000:0001');
+    }
+
+    /**
+     * Returns true if this IP address is in a private or reserved range.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool
     {
         return $this->isLocal;
     }
@@ -71,7 +85,7 @@ class IPv6Address implements IPAddressInterface
      * @param string|IPAddressInterface $address the CIDR address range to compare against this IPAddress
      *  instance.
      *
-     * @return bool true if this IPAddress fulls under the supplied CIDR range. If no range is supplied,
+     * @return bool true if this IPAddress falls under the supplied CIDR range. If no range is supplied,
      *  this address will be directly compared and will return whether both addresses are equal.
      *
      * @see https://www.ipaddressguide.com/ipv6-cidr
@@ -84,7 +98,7 @@ class IPv6Address implements IPAddressInterface
         }
 
         // if no forward slash, just compare
-        if (strpos($address, '/') === false)
+        if (!str_contains($address, '/'))
         {
             return $this->equals($address);
         }
@@ -93,6 +107,10 @@ class IPv6Address implements IPAddressInterface
         $subnet = inet_pton($subnet);
         $addr = inet_pton($this->ipAddress);
         $binMask = $this->iPv6MaskToByteArray($mask);
+
+        // Mask the subnet before comparison
+        $subnet = $subnet & $binMask;
+
         return ($addr & $binMask) == $subnet;
     }
 
@@ -107,9 +125,9 @@ class IPv6Address implements IPAddressInterface
     public function equals(string|IPAddressInterface $Ip): bool
     {
         if ($Ip instanceof IPv6Address)
-            return $Ip->equals($this->fullIpAddress);
+            return ($this->fullIpAddress === $Ip->fullIpAddress);
         else
-            return ($this->fullIpAddress == IPAddress::ExpandIPv6Notation($Ip));
+            return ($this->fullIpAddress === IPAddress::ExpandIPv6Notation($Ip, true));
     }
 
     /**
@@ -133,9 +151,9 @@ class IPv6Address implements IPAddressInterface
     }
 
     /**
-     * Returns the string representation of this IPAddress
+     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->ipAddress;
     }
@@ -173,11 +191,37 @@ class IPv6Address implements IPAddressInterface
 
     /**
      * Maps the IPAddress object to an IPv4 address.
+     * Supports IPv4-mapped IPv6 addresses (::ffff:x.x.x.x).
      *
      * @return IPv4Address
+     * @throws \BadMethodCallException if the address is not an IPv4-mapped IPv6 address.
      */
     public function mapToIPv4(): IPv4Address
     {
-        throw new \Exception('Cannot convert IPv6 to IPv4!');
+        // Check if this is an IPv4-mapped IPv6 address (::ffff:x.x.x.x)
+        $prefix = '0000:0000:0000:0000:0000:ffff:';
+        if (str_starts_with(strtolower($this->fullIpAddress), $prefix))
+        {
+            // Extract the last two groups and convert to IPv4
+            $hexPart = substr($this->fullIpAddress, strlen($prefix));
+            $groups = explode(':', $hexPart);
+            if (count($groups) === 2)
+            {
+                $high = hexdec($groups[0]);
+                $low = hexdec($groups[1]);
+                $ipv4 = sprintf(
+                    '%d.%d.%d.%d',
+                    ($high >> 8) & 0xFF,
+                    $high & 0xFF,
+                    ($low >> 8) & 0xFF,
+                    $low & 0xFF
+                );
+                return new IPv4Address($ipv4);
+            }
+        }
+
+        throw new \BadMethodCallException(
+            'Cannot convert IPv6 to IPv4: address is not an IPv4-mapped IPv6 address (::ffff:x.x.x.x).'
+        );
     }
 }

@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * Plexis Core
  *
@@ -15,7 +14,7 @@ use ReflectionException;
 use System\Diagnostics\LogWriter;
 use System\Http\Request;
 use System\Http\Response;
-use System\IO\Directory;
+use System\IO\File;
 use System\Routing\RouteNotFoundException;
 use System\Routing\RoutingDirective;
 
@@ -49,13 +48,7 @@ class ModuleProvider
      * Holds the module instance
      * @var AbstractModule
      */
-    public AbstractModule $module;
-
-    /**
-     * Holds the plexis Logger object
-     * @var LogWriter
-     */
-    protected static LogWriter $log;
+    public readonly AbstractModule $module;
 
     /**
      * @var string $name The name of the module
@@ -103,7 +96,7 @@ class ModuleProvider
     public static function Exists(string $name) : bool
     {
         $name = ucfirst($name);
-        return Directory::Exists( APP_DIR . DS . "modules" . DS . $name . DS . 'Module.php');
+        return File::Exists(APP_DIR . DS . "modules" . DS . $name . DS . 'Module.php');
     }
 
     /**
@@ -185,7 +178,7 @@ class ModuleProvider
             // Build file path to the controller, check if it exists
             $file = $this->module->rootPath . DS .'Controllers'. DS . $controller .'.php';
             if (!file_exists($file))
-                throw new Routing\RouteNotFoundException('Could not find the controller file "'. $file .'"');
+                throw new RouteNotFoundException('Could not find the controller file "'. $file .'"');
 
             // Load our controller file
             require $file;
@@ -196,31 +189,31 @@ class ModuleProvider
             $rController = new \ReflectionClass($fullClassName);
         }
         catch (ReflectionException $e) {
-            throw new Routing\RouteNotFoundException('Module controller not found "'. $fullClassName .'"', 0, $e);
+            throw new RouteNotFoundException('Module controller not found "'. $fullClassName .'"', 0, $e);
         }
 
         // Ensure our controller contains the IController interface
         if (!$rController->isSubclassOf('System\BaseController'))
-            throw new Routing\RouteNotFoundException(
+            throw new RouteNotFoundException(
                 'Module controller "'. $fullClassName .'" does not implement the required BaseController class.'
             );
 
         // Make sure the controller is not abstract object
         if ($rController->isAbstract())
-            throw new Routing\RouteNotFoundException(
+            throw new RouteNotFoundException(
                 'Module controller "'. $fullClassName .'" is abstract, and cannot be called via url'
             );
 
         // Check request method prefixed action
         if (!$rController->hasMethod($action))
-            throw new Routing\RouteNotFoundException(
-                "Controller \"{$controller}\" does not contain the a method \"{$action}\""
+            throw new RouteNotFoundException(
+                "Controller \"{$controller}\" does not contain the method \"{$action}\""
             );
 
         // If the method is not public, throw a 404 exception
         $method = $rController->getMethod($action);
         if (!$method->isPublic() || $method->isAbstract())
-            throw new Routing\RouteNotFoundException("Method \"{$action}\" is not a public method or is abstract, and cannot be called via URL.");
+            throw new RouteNotFoundException("Method \"{$action}\" is not a public method or is abstract, and cannot be called via URL.");
 
         // @TODO catch exception RequestCancelled
         // Invoke the module controller and action
@@ -237,20 +230,20 @@ class ModuleProvider
         catch (\ArgumentCountError $e)
         {
             // Occurs if Route is missing a REQUIRED parameter (no default value)
-            throw new Routing\RouteNotFoundException("Missing required parameter for action '{$action}': " . $e->getMessage());
+            throw new RouteNotFoundException("Missing required parameter for action '{$action}': " . $e->getMessage());
         }
         catch (\Error $e)
         {
             // Occurs if Route passes a parameter that the Controller DOES NOT accept
             // e.g. Route has {slug}, but function index($id) has no $slug
             if (str_contains($e->getMessage(), 'Unknown named parameter')) {
-                throw new Routing\RouteNotFoundException("Route defines a parameter that the action '{$action}' does not accept: " . $e->getMessage());
+                throw new RouteNotFoundException("Route defines a parameter that the action '{$action}' does not accept: " . $e->getMessage());
             }
             throw $e; // Rethrow actual code errors
         }
 
         if (!($returned instanceof Response))
-            throw new Routing\RouteNotFoundException("Method \"{$action}\" did not return a WebResponse object.");
+            throw new RouteNotFoundException("Method \"{$action}\" did not return a WebResponse object.");
 
         return $returned;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Plexis CMS, the Battlefield 2 private statistics frontend.
  *
@@ -86,6 +86,7 @@ class RouteNotFoundEvent extends StoppableEvent
     {
         $this->handled = true;
         $this->moduleProvider = $module;
+        $this->routingDirective = $directive;
 
         if ($this->request instanceof Request)
         {

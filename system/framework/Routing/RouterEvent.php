@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Plexis CMS, the Battlefield 2 private statistics frontend.
  *
@@ -16,9 +16,11 @@ namespace System\Routing;
 
 use System\Events\Event;
 
+/**
+ * Base event class for router lifecycle events.
+ */
 class RouterEvent extends Event
 {
-    public function __construct()
-    {
-    }
+    //  No additional properties or methods needed.
+    // Inherits everything from Event.
 }

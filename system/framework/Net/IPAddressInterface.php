@@ -10,19 +10,22 @@
  */
 namespace System\Net;
 
-interface IPAddressInterface
+interface IPAddressInterface extends \Stringable
 {
     /**
-     * The isLoopback method compares address to Loopback and returns true if the
-     *  two IP addresses are the same.
-     *
-     * In the case of IPv4, that the IsLoopback method returns true for any IP address
-     *  of the form 127.X.Y.Z (where X, Y, and Z are in the range 0-255), not just
-     *  Loopback (127.0.0.1).
+     * Returns true if this IP address is the loopback address.
+     * For IPv4: 127.x.x.x. For IPv6: ::1.
      *
      * @return bool
      */
     public function isLoopback(): bool;
+
+    /**
+     * Returns true if this IP address is in a private or reserved range.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool;
 
     /**
      * Indicates whether this address falls under the supplied CIDR

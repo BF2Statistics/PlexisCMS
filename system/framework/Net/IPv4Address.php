@@ -23,7 +23,7 @@ class IPv4Address implements IPAddressInterface
     protected string $ipAddress = "";
 
     /**
-     * @var bool Indicates whether this is a local IP address
+     * @var bool Indicates whether this is a local/private/reserved IP address
      */
     protected bool $isLocal;
 
@@ -34,8 +34,12 @@ class IPv4Address implements IPAddressInterface
      */
     public function __construct(string $address)
     {
-        // Check for CIDR ranges
+        // Check for CIDR ranges — reject them rather than silently stripping
         $parts = explode('/', $address);
+        if (count($parts) > 1)
+            throw new \InvalidArgumentException(
+                "CIDR notation is not supported in the constructor. Use isInCidr() for range checks."
+            );
 
         // Make sure IP is valid!
         if (!filter_var($parts[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
@@ -44,15 +48,25 @@ class IPv4Address implements IPAddressInterface
         // Define local properties
         $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
         $this->ipAddress = $parts[0];
-        $this->isLocal = (substr($parts[0], 0, 4) == "127." || !filter_var($parts[0], FILTER_VALIDATE_IP, $flags));
+        $this->isLocal = (str_starts_with($parts[0], "127.") || !filter_var($parts[0], FILTER_VALIDATE_IP, $flags));
     }
 
     /**
-     * Returns whether this IP address is the loopback address (Localhost)
+     * Returns true only for loopback addresses (127.x.x.x).
      *
      * @return bool
      */
     public function isLoopback(): bool
+    {
+        return (str_starts_with($this->ipAddress, "127."));
+    }
+
+    /**
+     * Returns true if this IP address is in a private or reserved range.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool
     {
         return $this->isLocal;
     }
@@ -63,7 +77,7 @@ class IPv4Address implements IPAddressInterface
      * @param string|IPAddressInterface $address the CIDR address range to compare against this IPAddress
      *  instance.
      *
-     * @return bool true if this IPAddress fulls under the supplied CIDR range. If no range is supplied,
+     * @return bool true if this IPAddress falls under the supplied CIDR range. If no range is supplied,
      *  this address will be directly compared and will return whether both addresses are equal.
      *
      * @see https://www.ipaddressguide.com/cidr
@@ -76,7 +90,7 @@ class IPv4Address implements IPAddressInterface
         }
 
         // if no forward slash, just compare
-        if (strpos($address, '/') === false)
+        if (!str_contains($address, '/'))
         {
             return $this->equals($address);
         }
@@ -125,9 +139,9 @@ class IPv4Address implements IPAddressInterface
     }
 
     /**
-     * Returns the string representation of this IPAddress
+     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->ipAddress;
     }
@@ -139,7 +153,7 @@ class IPv4Address implements IPAddressInterface
      */
     public function mapToIPv6(): IPv6Address
     {
-        return IPAddress::IPv4To6($this);
+        return IPAddress::Ipv4To6($this);
     }
 
     /**

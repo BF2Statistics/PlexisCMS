@@ -37,17 +37,7 @@ class PhpConfig extends ConfigBase
      */
     public function __construct(string $_filepath)
     {
-        // Some verification
-        if (empty($_filepath)) {
-            throw new \InvalidArgumentException("Invalid file path provided");
-        }
-
-        // Include file and add it to the $files array
-        if (!file_exists($_filepath))
-            throw new FileNotFoundException("Config file '{$_filepath}' does not exist!");
-
-        // Set filepath variable
-        $this->filePath = $_filepath;
+        $this->validateAndSetPath($_filepath);
         unset($_filepath);
 
         // Get defined variables
@@ -73,20 +63,12 @@ class PhpConfig extends ConfigBase
 
     /**
      * @inheritDoc
-     * @throws ObjectDisposedException
      * @throws FileNotFoundException
      * @throws DirectoryNotFoundException
      */
-    public function save(): bool
+    public function save(): void
     {
         $cfg = "<?php\n";
-        $cfg .= "/***************************************\n";
-        $cfg .= "*  Plexis CMS Config File              *\n";
-        $cfg .= "****************************************\n";
-        $cfg .= "* All comments have been removed from  *\n";
-        $cfg .= "* this file. Please use the Web Admin  *\n";
-        $cfg .= "* to change values.                    *\n";
-        $cfg .= "***************************************/\n";
 
         // Get each of the new set variables
         if ($this->arrayFormat)
@@ -102,18 +84,10 @@ class PhpConfig extends ConfigBase
         }
 
         // Copy the current config file for backup
-        File::Delete($this->filePath . '.bak');
-        File::Copy($this->filePath, $this->filePath . '.bak');
+        $this->backup();
 
-        // Allow the file to move before starting a new IO operation
-        // This was on Issue on a Windows 10 machine using Wamp
-        while (!file_exists($this->filePath . '.bak'))
-        {
-            usleep(200000); // Wait for 0.2 seconds
-        }
-
-        // Write the new config values to the new config
-        return File::WriteAllText($this->filePath, $cfg);
+        // Save the new configuration
+        File::WriteAllText($this->filePath, $cfg);
     }
 
     /**

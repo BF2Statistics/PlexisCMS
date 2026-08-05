@@ -12,8 +12,10 @@ namespace System\Configuration;
 
 use Exception;
 use System\Configuration\Drivers\IniConfig;
+use System\Configuration\Drivers\JsonConfig;
 use System\Configuration\Drivers\PhpConfig;
 use System\Configuration\Drivers\XmlConfig;
+use System\Configuration\Drivers\YamlConfig;
 use System\IO\FileNotFoundException;
 
 /**
@@ -40,16 +42,13 @@ class ConfigManager
     public static function Load(string $filename, ConfigType $configType = ConfigType::PHP): ConfigBase
 	{
         // Load the config driver and file
-        switch ($configType)
+        return match ($configType)
         {
-            case ConfigType::PHP:
-                return new PhpConfig($filename);
-            case ConfigType::INI:
-                return new IniConfig($filename);
-            case ConfigType::XML:
-                return new XmlConfig($filename);
-            case ConfigType::JSON:
-                throw new \Exception('To be implemented');
-        }
+            ConfigType::PHP => new PhpConfig($filename),
+            ConfigType::INI => new IniConfig($filename),
+            ConfigType::XML => new XmlConfig($filename),
+            ConfigType::JSON => new JsonConfig($filename),
+            ConfigType::YAML => new YamlConfig($filename),
+        };
 	}
 }

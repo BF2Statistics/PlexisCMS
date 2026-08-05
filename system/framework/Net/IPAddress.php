@@ -25,9 +25,10 @@ class IPAddress
     /**
      * Determines whether a string is a valid IP address
      *
-     * @param string $input A string that contains an IP address in dotted-quad notation for IPv4 and in colon-hexadecimal notation for IPv6.
-     * @param IPAddressInterface $out [Reference Variable] The IPAddress Object for the
-     * provided IP address version.
+     * @param string $input A string that contains an IP address in dotted-quad notation for IPv4
+     *  and in colon-hexadecimal notation for IPv6.
+     * @param IPAddressInterface|null $out [Reference Variable] The IPAddress Object for the
+     *  provided IP address version.
      *
      * @return bool True if the ipString is a valid IP address; otherwise, false.
      */
@@ -52,7 +53,7 @@ class IPAddress
         else
         {
             // Invalid IP
-            $out  = null;
+            $out = null;
             return false;
         }
     }
@@ -60,17 +61,18 @@ class IPAddress
     /**
      * Converts an IP address string to an IPAddress instance.
      *
-     * @param string $input A string that contains an IP address in dotted-quad notation for IPv4 and in colon-hexadecimal notation for IPv6.
+     * @param string $input A string that contains an IP address in dotted-quad notation for IPv4
+     *  and in colon-hexadecimal notation for IPv6.
      *
      * @return IPAddressInterface
      *
-     * @throws \System\ArgumentException if the supplied string is not a valid IP address.
+     * @throws ArgumentException if the supplied string is not a valid IP address.
      */
     public static function Parse(string $input): IPAddressInterface
     {
         $out = null;
         if (!self::TryParse($input, $out))
-            throw new \System\ArgumentException('Invalid IP Address string passed "'. $input .'"', 'input');
+            throw new ArgumentException('Invalid IP Address string passed "' . $input . '"', 'input');
 
         return $out;
     }
@@ -78,13 +80,13 @@ class IPAddress
     /**
      * Determine if a given IP address is within any of the specified CIDR ranges.
      *
-     * @param string $address The IP address to check.
+     * @param string|IPAddressInterface $address The IP address to check.
      * @param array $ranges An array of CIDR ranges to evaluate against.
      *
      * @return bool True if the IP address is within any of the specified ranges, otherwise false.
      * @throws ArgumentException
      */
-    public static function IsInCIDR(string $address, array $ranges): bool
+    public static function IsInCIDR(string|IPAddressInterface $address, array $ranges): bool
     {
         if (!($address instanceof IPAddressInterface))
         {
@@ -105,9 +107,9 @@ class IPAddress
      *
      * @param IPv4Address $Address
      *
-     * @return bool|IPv6Address
+     * @return IPv6Address
      */
-    public static function IPv4To6(IPv4Address $Address): IPv6Address|bool
+    public static function Ipv4To6(IPv4Address $Address): IPv6Address
     {
         // This tells IPv6 it has an IPv4 address
         static $Mask = '::ffff:';
@@ -115,71 +117,43 @@ class IPAddress
         // Convert to string
         $Ip = $Address->toString();
 
-        // Determine Ip version
-        $IPv6 = (strpos($Ip, '::') === 0);
-        $IPv4 = (strpos($Ip, '.') > 0);
-        if (!$IPv4 && !$IPv6)
-            return false; // Not a valid IP address
-
-        // Strip IPv4 Compatibility notation
-        if ($IPv6 && $IPv4)
-            $Ip = substr($Ip, strrpos($Ip, ':') + 1);
-
-        // Seems to be IPv6 already?
-        elseif (!$IPv4)
-            return $Ip;
-
         // Make sure there are 4 parts to the IPv4 address
-        $Ip = array_pad(explode('.', $Ip), 4, 0);
-        if (count($Ip) > 4)
-            return false;
-
-        // Make sure that the 4 parts do not exceed the limit
-        for ($i = 0; $i < 4; $i++)
-            if ($Ip[$i] > 255)
-                return false;
+        $parts = array_pad(explode('.', $Ip), 4, 0);
 
         // Convert ipv4 parts to ipv6
-        $Part7 = base_convert(($Ip[0] * 256) + $Ip[1], 10, 16);
-        $Part8 = base_convert(($Ip[2] * 256) + $Ip[3], 10, 16);
+        $Part7 = base_convert(($parts[0] * 256) + $parts[1], 10, 16);
+        $Part8 = base_convert(($parts[2] * 256) + $parts[3], 10, 16);
 
         return new IPv6Address($Mask . $Part7 . ':' . $Part8);
     }
 
     /**
-     * Replace '::' with appropriate number of ':0's
+     * Replace '::' with the appropriate number of ':0's
      *
      * @param string $Ip The Ipv6 address to expand
      * @param bool $pad By setting to true, 0 values will not be filtered,
      *   returning an absolute, full 32 character ip address
      *
-     * @return string|array
+     * @return string
      */
-    public static function ExpandIPv6Notation(string $Ip, bool $pad = false): string|array
+    public static function ExpandIPv6Notation(string $Ip, bool $pad = false): string
     {
-        if (strpos($Ip, '::') !== false)
-            $Ip = str_replace('::', str_repeat(':0', 8 - substr_count($Ip, ':')) . ':', $Ip);
-        if (strpos($Ip, ':') === 0)
-            $Ip = '0' . $Ip;
-        elseif ($Ip[strlen($Ip) - 1] == ":")
-            $Ip .= "0";
-
-        // Pad 0's ?
+        // Pad 0's ? Must be done BEFORE replacing '::' so the split works
         if ($pad)
         {
             $ipparts = explode('::', $Ip, 2);
 
             $head = $ipparts[0];
-            $tail = isset($ipparts[1]) ? $ipparts[1] : '';
+            $tail = $ipparts[1] ?? '';
 
-            $headparts = explode(':', $head);
-            $ippad = array();
+            $headparts = ($head !== '') ? explode(':', $head) : [];
+            $ippad = [];
             foreach ($headparts as $val)
                 $ippad[] = str_pad($val, 4, '0', STR_PAD_LEFT);
 
             if (count($ipparts) > 1)
             {
-                $tailparts = explode(':', $tail);
+                $tailparts = ($tail !== '') ? explode(':', $tail) : [];
                 $midparts = 8 - count($headparts) - count($tailparts);
 
                 for ($i = 0; $i < $midparts; $i++)
@@ -191,6 +165,14 @@ class IPAddress
 
             return implode(':', $ippad);
         }
+
+        // Non-padded expansion
+        if (str_contains($Ip, '::'))
+            $Ip = str_replace('::', str_repeat(':0', 8 - substr_count($Ip, ':')) . ':', $Ip);
+        if (str_starts_with($Ip, ':'))
+            $Ip = '0' . $Ip;
+        elseif ($Ip[strlen($Ip) - 1] == ":")
+            $Ip .= "0";
 
         return $Ip;
     }
@@ -271,6 +253,6 @@ class IPAddress
         if (!$allowPrivateRange)
             $flags |= FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
 
-        return filter_var($ip, $flags);
+        return filter_var($ip, $flags) !== false;
     }
 }

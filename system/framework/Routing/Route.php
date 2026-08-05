@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Plexis Core
  *
@@ -43,7 +43,7 @@ class Route
      * @param string $name The name of the route, used for fast lookups by name. Defaults to an empty string.
      *  If not provided, the path will be used as the name.
      * @param array $methods The HTTP methods associated with the route. Defaults to []. If not provided, the route
-     *  will be accessible via all HTTP methods.
+     *  will be accessible via all HTTP methods. Can pass String values or instances of {@see HttpMethod}.
      * @param bool $isAjax Indicates whether the route is restricted to AJAX requests. Defaults to false.
      * @param bool $isInternal Indicates whether the route is marked as internal. If true, this route
      *  cannot be called via the URL or {@see Dispatcher::process()} on the initial {@see Request}. Defaults to false.
@@ -63,7 +63,18 @@ class Route
 
         if (empty($this->methods))
         {
-            $this->methods = HttpMethod::cases();
+            $this->methods = array_map(
+                fn(HttpMethod $m) => $m->value,
+                HttpMethod::cases()
+            );
+        }
+        else
+        {
+            // Normalize: if enum instances were passed, convert to string values
+            $this->methods = array_map(
+                fn(mixed $m) => $m instanceof HttpMethod ? $m->value : (string)$m,
+                $this->methods
+            );
         }
     }
 
@@ -84,7 +95,7 @@ class Route
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getMethods(): array
     {

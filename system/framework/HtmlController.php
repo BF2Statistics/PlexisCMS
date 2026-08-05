@@ -97,6 +97,8 @@ abstract class HtmlController extends BaseController
      * @param Request $request The request object containing HTTP request details.
      * @param bool|null $loadTemplate Optional parameter to determine if the layout template should be loaded.
      *  If not specified, the template will be loaded unless the request is an internal sub-request.
+     *
+     * @throws ViewNotFoundException
      */
     public function __construct(ModuleProvider $provider, Request $request, ?bool $loadTemplate = null)
     {
